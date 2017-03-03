@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">onHere</string>
+    <string name="forgot_pass">Esqueci a senha</string>
+    <string name="sign_in_up">Inscreva-se</string>
+    <string name="remember_me">Lembrar-me</string>
+    <string name="login">Login</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="send">Enviar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="send_reset_password_email">Insira e-mail para redefinir sua senha.</string>
+    <string name="send_reset_password_email_title">Redefina sua senha.</string>
 </resources>
