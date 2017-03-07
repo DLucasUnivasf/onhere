@@ -15,4 +15,7 @@
     <string name="name">Nome</string>
     <string name="cpf">CPF</string>
     <string name="form_register">Formulário de Cadastro</string>
+    <string name="register_success">Usuário cadastrado com sucesso! Você já pode fazer login.</string>
+    <string name="register_success_title">Cadastro Efetuado</string>
+    <string name="ok">OK</string>
 </resources>
