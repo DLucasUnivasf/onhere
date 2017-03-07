@@ -48,7 +48,6 @@
         android:layout_alignEnd="@+id/editTextEmail"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/editTextEmail"
-        android:background="@drawable/icon"
         android:contentDescription="@string/app_name"
         app:srcCompat="@mipmap/ic_launcher" />
 
