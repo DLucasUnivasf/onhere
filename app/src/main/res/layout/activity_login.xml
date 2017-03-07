@@ -41,15 +41,16 @@
         android:layout_centerHorizontal="true" />
 
     <ImageView
+        android:id="@+id/imageViewLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageViewLogo"
         android:layout_above="@+id/editTextEmail"
         android:layout_alignEnd="@+id/editTextEmail"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/editTextEmail"
-        android:contentDescription="@string/app_name" />
+        android:background="@drawable/icon"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <CheckBox
         android:text="@string/remember_me"
