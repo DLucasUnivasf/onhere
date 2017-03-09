@@ -67,7 +67,15 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (editTextEmail.getText().toString().equals("")) {
+                    editTextEmail.setError(getResources().getString(R.string.required_field));
+                }
+                else if (editTextPass.getText().toString().equals("")) {
+                    editTextPass.setError(getResources().getString(R.string.required_field));
+                }
+                else {
+                    // Todo - Implementar a lógica
+                }
             }
         });
     }
