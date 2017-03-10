@@ -14,8 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity {
     final Context context = this;
+    private static final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                                             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
 
     EditText  editTextPass, editTextEmail;
     Button    buttonLogin, buttonSignInUp;
@@ -69,7 +75,11 @@ public class LoginActivity extends AppCompatActivity {
                             editTextResetEmail.setError(getResources().getString(R.string.required_field));
                         }
                         else {
-                            dialog.dismiss();
+                            if(validateEmail(editTextResetEmail.getText().toString()))
+                                dialog.dismiss();
+                            else {
+                                editTextResetEmail.setError(getResources().getString(R.string.insert_valid_email));
+                            }
                         }
                     }
                 });
@@ -98,5 +108,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public boolean validateEmail(String email) {
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches();
     }
 }
