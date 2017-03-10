@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         editTextEmail      = (EditText)  findViewById(R.id.editTextEmail);
         editTextPass       = (EditText)  findViewById(R.id.editTextPass);
@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                // Todo - Linkar com a activity de cadastro de forma a voltar pra essa no OK do AlertDialog
                 startActivity(intent);
             }
         });
@@ -97,22 +98,23 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editTextEmail.getText().toString().equals("")) {
+                if (editTextEmail.getText().toString().equals(""))
                     editTextEmail.setError(getResources().getString(R.string.required_field));
-                }
-                else if (editTextPass.getText().toString().equals("")) {
+                else if (editTextPass.getText().toString().equals(""))
                     editTextPass.setError(getResources().getString(R.string.required_field));
-                }
-                else {
-                    // Todo - Implementar a lógica
-                }
+                else
+                    if (validateEmail(editTextEmail.getText().toString())) {
+                        // Todo - Direcionar para a tela principal
+                        Log.i("Log", "Usuário inseriu email válido");
+                    }
+                    else
+                        editTextEmail.setError(getResources().getString(R.string.insert_valid_email));
             }
         });
     }
 
     public boolean validateEmail(String email) {
         Matcher matcher = pattern.matcher(email);
-
         return matcher.matches();
     }
 }
