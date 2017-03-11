@@ -1,6 +1,7 @@
 package galodamadrugada.onhere;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,7 +41,9 @@ public class RegisterActivity extends AppCompatActivity {
                         .setTitle(R.string.register_success_title)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                // User clicked OK button
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+
+                                startActivity(intent);
                             }
                         });
                 AlertDialog dialog = builder.create();

@@ -89,8 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonSignInUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                // Todo - Linkar com a activity de cadastro de forma a voltar pra essa no OK do AlertDialog
+                Intent intent = new Intent(LoginActivity.this, EventRegisterActivity.class);
                 startActivity(intent);
             }
         });
