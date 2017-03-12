@@ -1,6 +1,5 @@
 package galodamadrugada.onhere;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,16 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class LoginActivity extends AppCompatActivity {
     final Context context = this;
     private static final int REQUEST_CODE = 1;
-
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                                             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
 
     EditText  editTextPass, editTextEmail;
     Button    buttonLogin, buttonSignInUp;
@@ -78,9 +70,10 @@ public class LoginActivity extends AppCompatActivity {
                             editTextResetEmail.setError(getResources().getString(R.string.required_field));
                         }
                         else {
-                            if(validateEmail(editTextResetEmail.getText().toString()))
+                            if(ValidateField.isEmailValid(editTextResetEmail.getText().toString()))
                                 dialog.dismiss();
                             else {
+                                editTextResetEmail.requestFocus();
                                 editTextResetEmail.setError(getResources().getString(R.string.insert_valid_email));
                             }
                         }
@@ -100,17 +93,23 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editTextEmail.getText().toString().equals(""))
+                if (editTextEmail.getText().toString().equals("")) {
+                    editTextEmail.requestFocus();
                     editTextEmail.setError(getResources().getString(R.string.required_field));
-                else if (editTextPass.getText().toString().equals(""))
+                }
+                else if (editTextPass.getText().toString().equals("")) {
+                    editTextPass.requestFocus();
                     editTextPass.setError(getResources().getString(R.string.required_field));
+                }
                 else
-                    if (validateEmail(editTextEmail.getText().toString())) {
+                    if (ValidateField.isEmailValid(editTextEmail.getText().toString())) {
                         // Todo - Direcionar para a tela principal
                         Log.i("Log", "Usuário inseriu email válido");
                     }
-                    else
+                    else {
+                        editTextEmail.requestFocus();
                         editTextEmail.setError(getResources().getString(R.string.insert_valid_email));
+                    }
             }
         });
     }
@@ -118,10 +117,5 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    }
-
-    public boolean validateEmail(String email) {
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 }

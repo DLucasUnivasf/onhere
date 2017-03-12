@@ -22,12 +22,12 @@
         app:layout_constraintHorizontal_bias="0.503"
         />
 
-    <EditText
+    <galodamadrugada.onhere.EditTextCPF
         android:id="@+id/editTextCPF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:hint="@string/cpf"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
