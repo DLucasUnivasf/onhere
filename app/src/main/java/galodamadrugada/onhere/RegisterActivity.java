@@ -41,9 +41,10 @@ public class RegisterActivity extends AppCompatActivity {
                         .setTitle(R.string.register_success_title)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                Intent intent = new Intent();
+                                setResult(RESULT_OK, intent);
 
-                                startActivity(intent);
+                                finish();
                             }
                         });
                 AlertDialog dialog = builder.create();

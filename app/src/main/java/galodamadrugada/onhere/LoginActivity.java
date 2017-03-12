@@ -1,5 +1,6 @@
 package galodamadrugada.onhere;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,9 +21,11 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
     final Context context = this;
-    private static final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+    private static final int REQUEST_CODE = 1;
+
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                                              + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    private static final Pattern pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE);
+    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
 
     EditText  editTextPass, editTextEmail;
     Button    buttonLogin, buttonSignInUp;
@@ -90,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -110,6 +113,11 @@ public class LoginActivity extends AppCompatActivity {
                         editTextEmail.setError(getResources().getString(R.string.insert_valid_email));
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
     }
 
     public boolean validateEmail(String email) {
