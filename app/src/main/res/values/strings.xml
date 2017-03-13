@@ -25,4 +25,5 @@
     <string name="hour">Hora</string>
     <string name="required_field">Campo obrigatório</string>
     <string name="insert_valid_email">Insira um e-mail válido</string>
+    <string name="information">Informações</string>
 </resources>
