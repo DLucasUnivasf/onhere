@@ -103,7 +103,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                     if (ValidateField.isEmailValid(editTextEmail.getText().toString())) {
-                        // Todo - Direcionar para a tela principal
+                        Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(goToMain);
                         Log.i("Log", "Usuário inseriu email válido");
                     }
                     else {
