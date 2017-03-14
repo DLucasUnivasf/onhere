@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText editTextEmail, editTextPass1, editTextPass2, editTextCPF, editTextName;
+    EditText editTextEmail, editTextPass1, editTextPass2, editTextName;
     Button buttonRegister;
     TextView textViewRegister;
 
@@ -24,7 +24,6 @@ public class RegisterActivity extends AppCompatActivity {
         editTextEmail      = (EditText)  findViewById(R.id.editTextEmail);
         editTextPass1      = (EditText)  findViewById(R.id.editTextPass1);
         editTextPass2      = (EditText)  findViewById(R.id.editTextPass2);
-        editTextCPF        = (EditText)  findViewById(R.id.editTextCPF);
         editTextName       = (EditText)  findViewById(R.id.editTextName);
 
         buttonRegister     = (Button)    findViewById(R.id.buttonRegister);
