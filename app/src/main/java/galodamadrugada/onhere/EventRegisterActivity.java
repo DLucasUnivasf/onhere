@@ -58,7 +58,9 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
 
         switch (id) {
             case DATE_DIALOG_ID:
-                return new DatePickerDialog(this, mDateSetListener, year, month, day);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, mDateSetListener, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                return datePickerDialog;
             case HOUR_DIALOG_ID:
                 return new TimePickerDialog(this, mTimeSetListener, hour, minute, DateFormat.is24HourFormat(this));
         }
@@ -66,10 +68,10 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
     }
 
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            String data = String.valueOf(dayOfMonth) + " /" + String.valueOf(monthOfYear+1) + " /" + String.valueOf(year);
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            String data = String.valueOf(day) + " /" + String.valueOf(month+1) + " /" + String.valueOf(year);
             Toast.makeText(EventRegisterActivity.this, "DATA = " + data, Toast.LENGTH_SHORT).show();
-            showDate(year, monthOfYear+1, dayOfMonth);
+            showDate(year, month+1, day);
         }
     };
 

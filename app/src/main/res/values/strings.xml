@@ -28,4 +28,5 @@
     <string name="information">Informações</string>
     <string name="check_in_sucess">Check in efetuado com sucesso! Verifique seu perfil para mais detalhes.</string>
     <string name="evento">Eventos</string>
+    <string name="password_not_match">As senhas diferem.</string>
 </resources>
