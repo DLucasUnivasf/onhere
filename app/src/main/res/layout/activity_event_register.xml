@@ -35,7 +35,7 @@
         android:layout_alignTop="@+id/editTextEventName"
         android:layout_toStartOf="@+id/textViewHour"
         android:layout_marginEnd="26dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/editTextEventName" />
 
@@ -60,7 +60,7 @@
         android:hint="@string/delay_tolerance"
         app:layout_constraintTop_toBottomOf="@+id/buttonHour"
         android:layout_toLeftOf="@+id/textViewHour"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/textViewHour"
         android:layout_marginLeft="0dp"
@@ -76,7 +76,7 @@
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@+id/editTextDelay"
         android:layout_toLeftOf="@+id/textViewHour"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/editTextDelay" />
 
