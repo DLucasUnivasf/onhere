@@ -18,9 +18,9 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".EventRegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".CheckInActivity"></activity>
-        <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".EventActivity"></activity>
+        <activity android:name=".CheckInActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".EventActivity" />
     </application>
 
 </manifest>

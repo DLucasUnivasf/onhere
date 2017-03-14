@@ -19,10 +19,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="315dp"
+        android:layout_marginTop="36dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/buttonDate"
@@ -35,9 +34,9 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.275"
-        android:layout_alignTop="@+id/editTextEventName"
-        android:layout_toStartOf="@+id/textViewHour"
-        android:layout_marginEnd="26dp" />
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/editTextEventName"
+        android:layout_alignStart="@+id/editTextEventName" />
 
     <Button
         android:id="@+id/buttonHour"
@@ -50,9 +49,10 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonDate"
         app:layout_constraintVertical_bias="0.0"
-        android:layout_below="buttonDate"
-        android:layout_toLeftOf="@+id/textViewHour"
-        android:layout_marginRight="52dp" />
+        android:layout_marginRight="52dp"
+        android:layout_below="@+id/buttonDate"
+        android:layout_alignStart="@+id/buttonDate"
+        android:layout_marginTop="17dp" />
 
     <EditText
         android:id="@+id/editTextDelay"
@@ -65,9 +65,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintTop_toBottomOf="@+id/buttonHour"
-        android:layout_below="buttonHour"
-        android:layout_toLeftOf="@+id/textViewHour"
-        android:layout_marginRight="52dp" />
+        android:layout_marginRight="52dp"
+        android:layout_above="@+id/editTextDescription"
+        android:layout_alignStart="@+id/editTextEventName"
+        android:layout_marginBottom="39dp" />
 
     <EditText
         android:id="@+id/editTextDescription"
@@ -80,9 +81,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDelay"
-        android:layout_below="editTextDelay"
-        android:layout_toLeftOf="@+id/textViewHour"
-        android:layout_marginRight="52dp" />
+        android:layout_marginRight="52dp"
+        android:layout_marginBottom="37dp"
+        android:layout_above="@+id/buttonRegisterEvent"
+        android:layout_alignStart="@+id/editTextDelay" />
 
     <Button
         android:id="@+id/buttonRegisterEvent"
@@ -95,44 +97,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDescription"
         app:layout_constraintVertical_bias="0.133"
-        android:layout_below="editTextDescription"
-        android:layout_toLeftOf="@+id/textViewHour"
-        android:layout_marginRight="52dp" />
-
-    <TextView
-        android:id="@+id/textViewHour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.731"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.313"
-        android:layout_alignBaseline="@+id/buttonHour"
-        android:layout_alignBottom="@+id/buttonHour"
-        android:layout_alignEnd="@+id/editTextEventName" />
+        android:layout_marginRight="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp" />
 
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.654"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_above="@+id/buttonDate"
-        android:layout_alignStart="@+id/buttonDate" />
+        android:layout_alignBottom="@+id/buttonDate"
+        android:layout_marginBottom="10dp"
+        android:layout_toEndOf="@+id/buttonHour"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textViewHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonHour"
+        android:layout_marginBottom="13dp"
+        android:layout_toEndOf="@+id/buttonHour"
+        android:text="TextView" />
 
 
 </RelativeLayout>
