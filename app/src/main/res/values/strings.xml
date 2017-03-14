@@ -19,7 +19,7 @@
     <string name="register_success_title">Cadastro Efetuado</string>
     <string name="ok">OK</string>
     <string name="event_name">Nome do evento</string>
-    <string name="delay_tolerance">Tolerância de atraso</string>
+    <string name="delay_tolerance">Atraso permitido (min)</string>
     <string name="description">Descrição</string>
     <string name="date">Data</string>
     <string name="hour">Hora</string>
