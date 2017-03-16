@@ -32,4 +32,6 @@
     <string name="event_register_success">Visite seu perfil para mais detalhes.</string>
     <string name="event_register_success_title">Evento registrado!</string>
     <string name="go_to_profile">Ver prefil</string>
+    <string name="share_code">Compartilhar</string>
+    <string name="code">Código</string>
 </resources>
