@@ -18,19 +18,28 @@ public class CheckInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_check_in);
 
 
-        Button checkInButton = (Button) findViewById(R.id.checkin_CheckInButton);
+        Button checkInButton = (Button) findViewById(R.id.checkInCheckInButton);
+        final EditText checkinEventCode = (EditText) findViewById(R.id.checkinEventCode);
 
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CheckInActivity.this);
-                builder.setMessage(R.string.check_in_sucess).setPositiveButton("Visualizar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                                //Intent goToPerfil = new Intent(CheckInActivity.this,profile.class)
-                            }
-                        });
-                final AlertDialog dialog = builder.create();
-                dialog.show();
+
+               if(checkinEventCode.getText().toString().equals("")){
+                   checkinEventCode.requestFocus();
+                   checkinEventCode.setError(getResources().getString((R.string.required_field)));
+               }else {
+                   AlertDialog.Builder builder = new AlertDialog.Builder(CheckInActivity.this);
+                   builder.setMessage(R.string.check_in_sucess).setPositiveButton("Visualizar", new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int id) {
+                           Intent goToPerfil = new Intent(CheckInActivity.this,ProfileActivity.class);
+                           startActivity(goToPerfil);
+                           finish();
+                       }
+                   });
+                   final AlertDialog dialog = builder.create();
+                   dialog.show();
+               }
             }
         });
 

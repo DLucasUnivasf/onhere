@@ -21,6 +21,7 @@
         <activity android:name=".CheckInActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".EventActivity" />
+        <activity android:name=".EventInfoActivity"></activity>
     </application>
 
 </manifest>
