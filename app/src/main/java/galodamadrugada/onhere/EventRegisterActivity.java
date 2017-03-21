@@ -87,6 +87,7 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                                 public void onClick(DialogInterface dialog, int id) {
                                     Intent goToProfile = new Intent(EventRegisterActivity.this, ProfileActivity.class);
                                     startActivity(goToProfile);
+                                    finish();
                                 }
                             });
                     AlertDialog dialog = builder.create();
