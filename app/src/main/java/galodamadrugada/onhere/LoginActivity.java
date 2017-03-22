@@ -1,5 +1,6 @@
 package galodamadrugada.onhere;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +16,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+import galodamadrugada.onhere.network.CustomRequest;
+import galodamadrugada.onhere.network.NetworkConnection;
+import galodamadrugada.onhere.util.UrlConst;
+
 public class LoginActivity extends AppCompatActivity {
     final Context context = this;
     private static final int REQUEST_CODE = 1;
@@ -24,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox  checkBoxRemember;
     ImageView imageViewLogo;
     TextView  textViewForgotPass;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         checkBoxRemember   = (CheckBox)  findViewById(R.id.checkBoxRemember);
         imageViewLogo      = (ImageView) findViewById(R.id.imageViewLogo);
         textViewForgotPass = (TextView)  findViewById(R.id.textViewForgotPass);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
 
         textViewForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,9 +120,33 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                     if (ValidateField.isEmailValid(editTextEmail.getText().toString())) {
-                        Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
-                        startActivity(goToMain);
-                        Log.i("Log", "Usuário inseriu email válido");
+                        Log.i("LoginButton", "Email validado");
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("email", editTextEmail.getText().toString());
+                        params.put("password", editTextPass.getText().toString());
+
+                        progressDialog.setMessage("Carregando...");
+                        showProgressDialog();
+
+                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, UrlConst.SERVER + UrlConst.LOGIN, params,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.i("CustomRequest", "SUCCESSO: " + response.toString());
+                                    hideProgressDialog();
+                                    Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
+                                    startActivity(goToMain);
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                    hideProgressDialog();
+                                }
+                            }
+                        );
+                        NetworkConnection.getInstance().addToRequestQueue(customRequest);
                     }
                     else {
                         editTextEmail.requestFocus();
@@ -118,5 +159,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+    }
+
+    private void showProgressDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.hide();
     }
 }
