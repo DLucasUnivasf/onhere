@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
@@ -32,11 +34,11 @@ public class LoginActivity extends AppCompatActivity {
     final Context context = this;
     private static final int REQUEST_CODE = 1;
 
-    EditText  editTextPass, editTextEmail;
-    Button    buttonLogin, buttonSignInUp;
-    CheckBox  checkBoxRemember;
-    ImageView imageViewLogo;
-    TextView  textViewForgotPass;
+    EditText       editTextPass, editTextEmail;
+    Button         buttonLogin, buttonSignInUp;
+    CheckBox       checkBoxRemember;
+    ImageView      imageViewLogo;
+    TextView       textViewForgotPass;
     ProgressDialog progressDialog;
 
     @Override
@@ -54,6 +56,28 @@ public class LoginActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
+
+        final String PREFS_FILE_NAME = "mPrefsFile";
+        final String UNIQUE_ID       = "UNIQUE_ID";
+        String uniqueId;
+
+        SharedPreferences preferences = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
+
+        if (preferences.getBoolean("first_time", true)) {
+            // O aplicativo está sendo aberto pela primeira vez
+            Log.d("SharedPreferences", "Primeiro boot");
+
+            uniqueId = UUID.randomUUID().toString();
+
+            preferences.edit().putString(UNIQUE_ID, uniqueId).apply();
+
+            if(uniqueId.equals(""))
+                preferences.edit().putBoolean("first_time", false).apply();
+        }
+
+        uniqueId = preferences.getString(UNIQUE_ID, "");
+
+        Log.i("UNIQUE_ID", uniqueId);
 
         textViewForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
