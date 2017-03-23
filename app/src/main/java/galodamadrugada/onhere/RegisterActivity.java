@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setMessage("Carregando...");
                     showProgressDialog();
 
-                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_USER, params,
+                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_USER, params, null,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {

@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -54,10 +55,10 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
-        final String UNIQUE_ID       = "UNIQUE_ID";
+        final String UNIQUE_ID = "UNIQUE_ID";
         String uniqueId;
 
-        SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
 
         if (preferences.getBoolean("first_time", true)) {
             Log.d("SharedPreferences", "Primeiro boot");
@@ -68,6 +69,43 @@ public class LoginActivity extends AppCompatActivity {
 
             if(!uniqueId.equals(""))
                 preferences.edit().putBoolean("first_time", false).apply();
+        }
+        else {
+            if(!preferences.getString("token", "").equals("")) {
+                progressDialog.setMessage(getResources().getString(R.string.loading));
+                showProgressDialog();
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", preferences.getString("token", ""));
+
+                CustomRequest customRequest = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.CHECK_TOKEN, null, headers,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    Log.i("SUCESSO", response.toString());
+                                    if (response.getString("status").equals("666")) {
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        hideProgressDialog();
+                                        finish();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                hideProgressDialog();
+                            }
+                        }
+                );
+
+                NetworkConnection.getInstance().addToRequestQueue(customRequest);
+                hideProgressDialog();
+            }
         }
 
         uniqueId = preferences.getString(UNIQUE_ID, "");
@@ -147,11 +185,16 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.setMessage(getResources().getString(R.string.loading));
                         showProgressDialog();
 
-                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.LOGIN, params,
+                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.LOGIN, params, null,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Log.i("CustomRequest", "SUCCESSO: " + response.toString());
+                                    try {
+                                        preferences.edit().putString("token", response.getString("token")).apply();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                     hideProgressDialog();
                                     Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(goToMain);

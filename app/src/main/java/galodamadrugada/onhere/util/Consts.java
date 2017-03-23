@@ -13,7 +13,8 @@ public class Consts {
     public static final String CHECK_IN       = "api/usuario/evento/entrar";
     public static final String LIST_EVENTS    = "api/usuario/evento/lista";
     public static final String LIST_MY_EVENTS = "api/usuario/evento/mine";
+    public static final String CHECK_TOKEN    = "api/token/valida";
 
-    // Strings cnstantes do app
+    // Strings constantes do app
     public static final String PREFS_FILE_NAME = "mPrefsFile";
 }
