@@ -35,4 +35,5 @@
     <string name="time_start">Horário de início</string>
     <string name="share_code">Compartilhar</string>
     <string name="code">Código</string>
+    <string name="loading">Carregando…</string>
 </resources>

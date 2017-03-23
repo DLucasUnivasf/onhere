@@ -28,7 +28,7 @@ import java.util.UUID;
 
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
-import galodamadrugada.onhere.util.UrlConst;
+import galodamadrugada.onhere.util.Consts;
 
 public class LoginActivity extends AppCompatActivity {
     final Context context = this;
@@ -57,21 +57,19 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
-        final String PREFS_FILE_NAME = "mPrefsFile";
         final String UNIQUE_ID       = "UNIQUE_ID";
         String uniqueId;
 
-        SharedPreferences preferences = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
 
         if (preferences.getBoolean("first_time", true)) {
-            // O aplicativo está sendo aberto pela primeira vez
             Log.d("SharedPreferences", "Primeiro boot");
 
             uniqueId = UUID.randomUUID().toString();
 
             preferences.edit().putString(UNIQUE_ID, uniqueId).apply();
 
-            if(uniqueId.equals(""))
+            if(!uniqueId.equals(""))
                 preferences.edit().putBoolean("first_time", false).apply();
         }
 
@@ -149,10 +147,10 @@ public class LoginActivity extends AppCompatActivity {
                         params.put("email", editTextEmail.getText().toString());
                         params.put("password", editTextPass.getText().toString());
 
-                        progressDialog.setMessage("Carregando...");
+                        progressDialog.setMessage(getResources().getString(R.string.loading));
                         showProgressDialog();
 
-                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, UrlConst.SERVER + UrlConst.LOGIN, params,
+                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.LOGIN, params,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
