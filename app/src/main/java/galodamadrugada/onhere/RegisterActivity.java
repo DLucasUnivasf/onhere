@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,9 +22,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
@@ -99,36 +102,42 @@ public class RegisterActivity extends AppCompatActivity {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
 
 
-                                    if(response.toString() == "408") {
-                                        Log.i("CustomRequest", "Erro: " + response.toString());
-                                        hideProgressDialog();
+                                    try {
+                                        if(response.getString("status").equals("408")) {
+                                            Log.i("CustomRequest", "Erro: " + response.toString());
+                                            hideProgressDialog();
 
-                                        dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
-                                        dialogButton = getResources().getString(R.string.back);
-                                        dialogText = getResources().getString(R.string.register_email_already_exist);
+                                            dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
+                                            dialogButton = getResources().getString(R.string.back);
+                                            dialogText = getResources().getString(R.string.register_email_already_exist);
 
-                                        builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                            }
-                                        });
-                                    }
+                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                        }
 
-                                    else{
-                                        Log.i("CustomRequest", "Sucesso: " + response.toString());
-                                        hideProgressDialog();
+                                        else{
+                                            Log.i("CustomRequest", "Sucesso: " + response.toString());
+                                            hideProgressDialog();
 
-                                        dialogTitle = getResources().getString(R.string.register_success_title);
-                                        dialogButton = getResources().getString(R.string.ok);
-                                        dialogText = getResources().getString(R.string.register_success);
+                                            dialogTitle = getResources().getString(R.string.register_success_title);
+                                            dialogButton = getResources().getString(R.string.ok);
+                                            dialogText = getResources().getString(R.string.register_success);
 
-                                        builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                Intent intent = new Intent();
-                                                setResult(RESULT_OK, intent);
+                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    Intent intent = new Intent();
+                                                    intent.setData(Uri.parse(editTextEmail.getText().toString()));
 
-                                                finish();
-                                            }
-                                        });
+                                                    setResult(RESULT_OK, intent);
+
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
 
                                     LayoutInflater inflater = RegisterActivity.this.getLayoutInflater();
