@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
-import galodamadrugada.onhere.util.UrlConst;
+import galodamadrugada.onhere.util.Consts;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText editTextEmail, editTextPass1, editTextPass2, editTextName;
@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setMessage("Carregando...");
                     showProgressDialog();
 
-                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, UrlConst.SERVER + UrlConst.NEW_USER, params,
+                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_USER, params,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
