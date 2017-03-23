@@ -180,7 +180,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if(requestCode==1) {
+            if(resultCode==RESULT_OK) {
+                editTextEmail.setText(data.getData().toString());
+            }
+        }
     }
 
     private void showProgressDialog() {
