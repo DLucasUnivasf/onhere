@@ -35,4 +35,8 @@
     <string name="time_start">Horário de início</string>
     <string name="share_code">Compartilhar</string>
     <string name="code">Código</string>
+    <string name="register_email_already_exist">Esse e-mail já foi cadastrado.</string>
+    <string name="register_email_already_exist_title">Falha:</string>
+    <string name="back">Voltar</string>
+    <string name="http_error">Erro HTTP. Por favor, tente novamente.</string>
 </resources>

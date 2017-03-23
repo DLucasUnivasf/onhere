@@ -7,4 +7,5 @@ package galodamadrugada.onhere.util;
 public class UrlConst {
     public static final String SERVER = "https://pure-sea-25119.herokuapp.com/";
     public static final String LOGIN  = "api/usuario/login";
+    public static final String NEW_USER  = "api/usuario/novo";
 }
