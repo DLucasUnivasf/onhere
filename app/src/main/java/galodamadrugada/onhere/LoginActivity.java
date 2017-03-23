@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,10 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
 
     EditText       editTextPass, editTextEmail;
-    Button         buttonLogin, buttonSignInUp;
-    CheckBox       checkBoxRemember;
+    Button         buttonLogin;
     ImageView      imageViewLogo;
-    TextView       textViewForgotPass;
+    TextView       textViewForgotPass, textViewSignInUp;
     ProgressDialog progressDialog;
 
     @Override
@@ -49,8 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail      = (EditText)  findViewById(R.id.editTextEmail);
         editTextPass       = (EditText)  findViewById(R.id.editTextPass);
         buttonLogin        = (Button)    findViewById(R.id.buttonLogin);
-        buttonSignInUp     = (Button)    findViewById(R.id.buttonSignInUp);
-        checkBoxRemember   = (CheckBox)  findViewById(R.id.checkBoxRemember);
+        textViewSignInUp     = (TextView)    findViewById(R.id.textViewSignInUp);
         imageViewLogo      = (ImageView) findViewById(R.id.imageViewLogo);
         textViewForgotPass = (TextView)  findViewById(R.id.textViewForgotPass);
 
@@ -121,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        buttonSignInUp.setOnClickListener(new View.OnClickListener() {
+        textViewSignInUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);

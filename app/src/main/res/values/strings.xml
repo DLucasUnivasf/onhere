@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">onHere</string>
-    <string name="forgot_pass">Esqueci a senha</string>
-    <string name="sign_in_up">Inscreva-se</string>
+    <string name="forgot_pass">Esqueceu a senha?</string>
+    <string name="sign_in_up">Não possui conta ainda? Cadastre-se!</string>
     <string name="remember_me">Lembrar-me</string>
     <string name="login">Login</string>
     <string name="e_mail">E-mail</string>
