@@ -52,65 +52,10 @@ public class LoginActivity extends AppCompatActivity {
         imageViewLogo      = (ImageView) findViewById(R.id.imageViewLogo);
         textViewForgotPass = (TextView)  findViewById(R.id.textViewForgotPass);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-
-        final String UNIQUE_ID = "UNIQUE_ID";
-        String uniqueId;
-
         final SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
 
-        if (preferences.getBoolean("first_time", true)) {
-            Log.d("SharedPreferences", "Primeiro boot");
-
-            uniqueId = UUID.randomUUID().toString();
-
-            preferences.edit().putString(UNIQUE_ID, uniqueId).apply();
-
-            if(!uniqueId.equals(""))
-                preferences.edit().putBoolean("first_time", false).apply();
-        }
-        else {
-            if(!preferences.getString("token", "").equals("")) {
-                progressDialog.setMessage(getResources().getString(R.string.loading));
-                showProgressDialog();
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", preferences.getString("token", ""));
-
-                CustomRequest customRequest = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.CHECK_TOKEN, null, headers,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    Log.i("SUCESSO", response.toString());
-                                    if (response.getString("status").equals("666")) {
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        hideProgressDialog();
-                                        finish();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
-                                hideProgressDialog();
-                            }
-                        }
-                );
-
-                NetworkConnection.getInstance().addToRequestQueue(customRequest);
-                hideProgressDialog();
-            }
-        }
-
-        uniqueId = preferences.getString(UNIQUE_ID, "");
-
-        Log.i("UNIQUE_ID", uniqueId);
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setCancelable(false);
 
         textViewForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                                     hideProgressDialog();
                                     Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(goToMain);
+                                    finish();
                                 }
                             },
                             new Response.ErrorListener() {
@@ -216,6 +162,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
             }
         });
+
+        hideProgressDialog();
     }
 
     @Override
@@ -234,6 +182,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void hideProgressDialog() {
         if (progressDialog.isShowing())
-            progressDialog.hide();
+            progressDialog.dismiss();
     }
 }
