@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button checkInButton = (Button) findViewById(R.id.mainCheckInButton);
-        Button newEventButton = (Button) findViewById(R.id.newEventButton);
+        FloatingActionButton newEventButton = (FloatingActionButton) findViewById(R.id.newEventButton);
         EditText descriptionText = (EditText) findViewById(R.id.mainDescription);
 
         descriptionText.setText("   OnHere gerencia seus eventos! \n\n"+
