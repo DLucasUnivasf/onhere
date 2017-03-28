@@ -29,6 +29,7 @@ import org.w3c.dom.Text;
 
 public class ProfileActivity  extends AppCompatActivity{
 
+
     TextView        textViewInformation;
     TextView        textViewName;
     TextView        textViewEmail;
