@@ -1,7 +1,10 @@
 package galodamadrugada.onhere;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +16,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Objects;
+
+import galodamadrugada.onhere.network.CustomRequest;
+import galodamadrugada.onhere.network.NetworkConnection;
+import galodamadrugada.onhere.util.Consts;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText editTextEmail, editTextPass1, editTextPass2, editTextName;
     Button buttonRegister;
     TextView textViewRegister;
+    ProgressDialog progressDialog;
+    String dialogTitle, dialogText, dialogButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
         textViewRegister   = (TextView)  findViewById(R.id.textViewRegister);
 
 
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,22 +86,97 @@ public class RegisterActivity extends AppCompatActivity {
                     editTextPass2.setError(getResources().getString(R.string.password_not_match));
                 }
                 else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    LayoutInflater inflater = RegisterActivity.this.getLayoutInflater();
-                    builder.setView(inflater.inflate(R.layout.dialog_register_success, null))
-                            .setTitle(R.string.register_success_title)
-                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent intent = new Intent();
-                                    setResult(RESULT_OK, intent);
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("fullname", editTextName.getText().toString());
+                    params.put("email", editTextEmail.getText().toString());
+                    params.put("password", editTextPass1.getText().toString());
 
-                                    finish();
+                    progressDialog.setMessage("Carregando...");
+                    showProgressDialog();
+
+                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_USER, params, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+
+
+                                    try {
+                                        if(response.getString("status").equals("408")) {
+                                            Log.i("CustomRequest", "Erro: " + response.toString());
+                                            hideProgressDialog();
+
+                                            dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
+                                            dialogButton = getResources().getString(R.string.back);
+                                            dialogText = getResources().getString(R.string.register_email_already_exist);
+
+                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                        }
+
+                                        else{
+                                            Log.i("CustomRequest", "Sucesso: " + response.toString());
+                                            hideProgressDialog();
+
+                                            dialogTitle = getResources().getString(R.string.register_success_title);
+                                            dialogButton = getResources().getString(R.string.ok);
+                                            dialogText = getResources().getString(R.string.register_success);
+
+                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    Intent intent = new Intent();
+                                                    intent.setData(Uri.parse(editTextEmail.getText().toString()));
+
+                                                    setResult(RESULT_OK, intent);
+
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    LayoutInflater inflater = RegisterActivity.this.getLayoutInflater();
+                                    builder.setMessage(dialogText)
+                                            .setTitle(dialogTitle);
+
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
                                 }
-                            });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                    hideProgressDialog();
+
+                                    Context context = getApplicationContext();
+                                    CharSequence text = getResources().getString(R.string.http_error);
+                                    int duration = Toast.LENGTH_SHORT;
+
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
+                            }
+                    );
+                    NetworkConnection.getInstance().addToRequestQueue(customRequest);
+
+
                 }
             }
         });
+    }
+    private void showProgressDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.hide();
     }
 }

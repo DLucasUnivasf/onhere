@@ -2,13 +2,17 @@ package galodamadrugada.onhere;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,24 +22,49 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
+import galodamadrugada.onhere.network.CustomRequest;
+import galodamadrugada.onhere.network.NetworkConnection;
+import galodamadrugada.onhere.util.Consts;
 
 public class EventRegisterActivity extends AppCompatActivity implements Button.OnClickListener{
 
+/////////////////////////////// VARIÁVEIS /////////////////////////////////
     private Calendar calendar;
-    private int year, month, day;
-    private int hour, minute;
+    private int year, month, day, hour, minute, selector;
     private EditText editTextEventName, editTextDelay, editTextDescription;
-    private TextView textViewHour, textViewDate;
-    private Button buttonHour, buttonDate, buttonRegisterEvent;
+    private TextView textViewHour, textViewDate, textViewDateEnd, textViewHourEnd;
+    private Button buttonHour, buttonDate, buttonRegisterEvent, buttonEndHour, buttonEndDate;
     static final int DATE_DIALOG_ID = 0;
     static final int HOUR_DIALOG_ID = 1;
+
+    String dateStart, hourStart, dateEnd, hourEnd;
+
+    ProgressDialog progressDialog;
+
+    String dialogTitle, dialogText, dialogButton;
+
+    HashMap<String, String> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_register);
+
+/////////////////////////////// INICIALIZAÇÃO /////////////////////////////////
 
         editTextEventName = (EditText) findViewById(R.id.editTextEventName);
         editTextDelay = (EditText) findViewById(R.id.editTextDelay);
@@ -47,8 +76,16 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         buttonHour = (Button) findViewById(R.id.buttonHour);
         buttonHour.setOnClickListener((View.OnClickListener) this);
 
+        buttonEndDate = (Button) findViewById(R.id.buttonDateEnd);
+        buttonEndDate.setOnClickListener((View.OnClickListener) this);
+
+        buttonEndHour = (Button) findViewById(R.id.buttonHourEnd);
+        buttonEndHour.setOnClickListener((View.OnClickListener) this);
+
         textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewHour = (TextView) findViewById(R.id.textViewHour);
+        textViewDateEnd = (TextView) findViewById(R.id.textViewDateEnd);
+        textViewHourEnd = (TextView) findViewById(R.id.textViewHourEnd);
 
         buttonRegisterEvent = (Button) findViewById(R.id.buttonRegisterEvent);
 
@@ -60,12 +97,46 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+
+        selector = 3;
         showDate(year, month+1, day);
         showTime(hour, minute);
 
         buttonRegisterEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+                Date inTime = null, outTime = null, inDate = null, outDate = null;
+
+                try {
+                    inDate = sdf2.parse(textViewDate.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    outDate = sdf2.parse(textViewDateEnd.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    inTime = sdf.parse(textViewHour.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    outTime = sdf.parse(textViewHourEnd.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                assert inTime != null;
+                assert outTime != null;
+                assert outDate != null;
+                assert inDate != null;
+
                 if (editTextEventName.getText().toString().equals("")) {
                     editTextEventName.requestFocus();
                     editTextEventName.setError(getResources().getString(R.string.required_field));
@@ -78,22 +149,123 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                     editTextDescription.requestFocus();
                     editTextDescription.setError(getResources().getString(R.string.required_field));
                 }
+                else if (inDate.after(outDate)) {
+                        Context context = getApplicationContext();
+                        CharSequence text = getResources().getString(R.string.difference_date);
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                }
+                else if ((outDate.equals(inDate)) && (inTime.compareTo(outTime) != -1)) {
+                        Context context = getApplicationContext();
+                        CharSequence text = getResources().getString(R.string.difference_hour);
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                }
                 else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(EventRegisterActivity.this);
-                    LayoutInflater inflater = EventRegisterActivity.this.getLayoutInflater();
-                    builder.setView(inflater.inflate(R.layout.dialog_event_register_success, null))
-                            .setTitle(R.string.event_register_success_title)
-                            .setPositiveButton(R.string.go_to_profile, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent goToProfile = new Intent(EventRegisterActivity.this, ProfileActivity.class);
-                                    startActivity(goToProfile);
-                                    finish();
+                    params.put("desc", editTextDescription.getText().toString());
+                    params.put("nome", editTextEventName.getText().toString());
+                    params.put("dtin", dateStart + hourStart);
+                    params.put("tolerancia", editTextDelay.getText().toString());
+                    params.put("dtfim", dateEnd + hourEnd);
+//                    params.put("latitude", );
+//                    params.put("longitude", );
+
+                    progressDialog.setMessage("Carregando...");
+                    showProgressDialog();
+
+                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_EVENT, params, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(EventRegisterActivity.this);
+
+
+                                    try {
+                                        if (response.getString("status").equals("418")) {
+                                            Log.i("CustomRequest", "Erro: " + response.toString());
+                                            hideProgressDialog();
+
+                                            dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
+                                            dialogButton = getResources().getString(R.string.back);
+                                            dialogText = getResources().getString(R.string.register_email_already_exist);
+
+                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            Log.i("CustomRequest", "Sucesso: " + response.toString());
+                                            hideProgressDialog();
+
+                                            dialogTitle = getResources().getString(R.string.event_register_success_title);
+                                            dialogButton = getResources().getString(R.string.go_to_profile);
+                                            dialogText = getResources().getString(R.string.event_register_success);
+
+                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    Intent goToProfile = new Intent(EventRegisterActivity.this, ProfileActivity.class);
+                                                    startActivity(goToProfile);
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    LayoutInflater inflater = EventRegisterActivity.this.getLayoutInflater();
+                                    builder.setMessage(dialogText)
+                                            .setTitle(dialogTitle);
+
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
                                 }
-                            });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                    hideProgressDialog();
+
+                                    Context context = getApplicationContext();
+                                    CharSequence text = getResources().getString(R.string.http_error);
+                                    int duration = Toast.LENGTH_SHORT;
+
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
+                            }
+                    );
+                    NetworkConnection.getInstance().addToRequestQueue(customRequest);
+
+
                 }
             }
+
+
+
+
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(EventRegisterActivity.this);
+//                    LayoutInflater inflater = EventRegisterActivity.this.getLayoutInflater();
+//                    builder.setView(inflater.inflate(R.layout.dialog_event_register_success, null))
+//                            .setTitle(R.string.event_register_success_title)
+//                            .setPositiveButton(R.string.go_to_profile, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    Intent goToProfile = new Intent(EventRegisterActivity.this, ProfileActivity.class);
+//                                    startActivity(goToProfile);
+//                                    finish();
+//                                }
+//                            });
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//                }
+
         });
     }
 
@@ -113,6 +285,15 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
 
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int month, int day) {
+            if(selector == 1)
+                dateStart = String.format("%04d-%02d-%02dT", year, month+1, day);
+            if(selector == 2)
+                dateEnd = String.format("%04d-%02d-%02dT", year, month+1, day);
+            if(selector == 3) {
+                dateStart = String.format("%04d-%02d-%02dT", year, month + 1, day);
+                dateEnd = String.format("%04d-%02d-%02dT", year, month + 1, day);
+            }
+
             showDate(year, month+1, day);
         }
     };
@@ -120,23 +301,69 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
     private TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if(selector == 1)
+                hourStart = String.format("%02d:%02d.00Z", hourOfDay, minute);
+            if(selector == 2)
+                hourEnd = String.format("%02d:%02d.00Z", hourOfDay, minute);
+            if(selector == 3) {
+                hourStart = String.format("%02d:%02d.00Z", hourOfDay, minute);
+                hourEnd = String.format("%02d:%02d.00Z", hourOfDay, minute);
+            }
             showTime(hourOfDay, minute);
         }
     };
 
    private void showDate(int year, int month, int day) {
-        textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+       if(selector == 1)
+           textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+
+       if(selector == 2)
+           textViewDateEnd.setText(String.format("%02d/%02d/%04d", day, month, year));
+
+       if(selector == 3){
+           textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+           textViewDateEnd.setText(String.format("%02d/%02d/%04d", day, month, year));
+           }
     }
 
     private void showTime(int hour, int minute) {
-        textViewHour.setText(String.format("%02d:%02dh", hour, minute));
+        if(selector == 1)
+            textViewHour.setText(String.format("%02d:%02d", hour, minute));
+        if(selector == 2)
+            textViewHourEnd.setText(String.format("%02d:%02d", hour, minute));
+        if(selector == 3){
+            textViewHour.setText(String.format("%02d:%02d", hour, minute));
+            textViewHourEnd.setText(String.format("%02d:%02d", hour, minute));
+        }
     }
 
    @Override
     public void onClick(View v) {
-       if (v == buttonDate)
-            showDialog(DATE_DIALOG_ID);
-       if (v == buttonHour)
-            showDialog(HOUR_DIALOG_ID);
+       if (v == buttonDate) {
+           selector = 1;
+           showDialog(DATE_DIALOG_ID);
+       }
+       if (v == buttonHour) {
+           selector = 1;
+           showDialog(HOUR_DIALOG_ID);
+       }
+       if (v == buttonEndHour) {
+           selector = 2;
+           showDialog(HOUR_DIALOG_ID);
+       }
+       if (v == buttonEndDate) {
+           selector = 2;
+           showDialog(DATE_DIALOG_ID);
+       }
+    }
+
+    private void showProgressDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.hide();
     }
 }
