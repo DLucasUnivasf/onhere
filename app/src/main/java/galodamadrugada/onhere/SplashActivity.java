@@ -1,10 +1,12 @@
 package galodamadrugada.onhere;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -56,14 +58,10 @@ public class SplashActivity extends AppCompatActivity {
                                 try {
                                     Log.i("SUCESSO", response.toString());
                                     if (response.getString("status").equals("666")) {
-                                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        goToMain();
                                     }
                                     else {
-                                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        goToLogin();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -77,14 +75,35 @@ public class SplashActivity extends AppCompatActivity {
                             }
                         }
                 );
+                if(NetworkConnection.getInstance().isOnline()) {
+                    NetworkConnection.getInstance().addToRequestQueue(customRequest);
+                }
+                else {
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.network_not_conected);
+                    int duration = Toast.LENGTH_LONG;
 
-                NetworkConnection.getInstance().addToRequestQueue(customRequest);
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+
+                    goToLogin();
+                }
             }
             else {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                goToLogin();
             }
         }
+    }
+
+    private void goToLogin() {
+        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToMain() {
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

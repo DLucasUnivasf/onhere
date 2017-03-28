@@ -44,4 +44,5 @@
     <string name="loading">Carregando…</string>
     <string name="difference_hour">A hora final deve ser posterior à hora de início.</string>
     <string name="difference_date">A data final deve ser posterior ou igual à data de início.</string>
+    <string name="network_not_conected">Não foi encontrada conexão com a internet.</string>
 </resources>

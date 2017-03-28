@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -90,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             if(ValidateField.isEmailValid(editTextResetEmail.getText().toString()))
+                                // Todo: Enviar email ao usuário com link para resetar a senha.
                                 dialog.dismiss();
                             else {
                                 editTextResetEmail.requestFocus();
@@ -123,38 +125,48 @@ public class LoginActivity extends AppCompatActivity {
                 else
                     if (ValidateField.isEmailValid(editTextEmail.getText().toString())) {
                         Log.i("LoginButton", "Email validado");
-                        HashMap<String, String> params = new HashMap<>();
-                        params.put("email", editTextEmail.getText().toString());
-                        params.put("password", editTextPass.getText().toString());
+                        if(NetworkConnection.getInstance().isOnline()) {
+                            HashMap<String, String> params = new HashMap<>();
+                            params.put("email", editTextEmail.getText().toString());
+                            params.put("password", editTextPass.getText().toString());
 
-                        progressDialog.setMessage(getResources().getString(R.string.loading));
-                        showProgressDialog();
+                            progressDialog.setMessage(getResources().getString(R.string.loading));
+                            showProgressDialog();
 
-                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.LOGIN, params, null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.i("CustomRequest", "SUCCESSO: " + response.toString());
-                                    try {
-                                        preferences.edit().putString("token", response.getString("token")).apply();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                            CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.LOGIN, params, null,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Log.i("CustomRequest", "SUCCESSO: " + response.toString());
+                                            try {
+                                                preferences.edit().putString("token", response.getString("token")).apply();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            hideProgressDialog();
+                                            Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                                            startActivity(goToMain);
+                                            finish();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                            hideProgressDialog();
+                                        }
                                     }
-                                    hideProgressDialog();
-                                    Intent goToMain = new Intent(LoginActivity.this,MainActivity.class);
-                                    startActivity(goToMain);
-                                    finish();
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
-                                    hideProgressDialog();
-                                }
-                            }
-                        );
-                        NetworkConnection.getInstance().addToRequestQueue(customRequest);
+                            );
+                            NetworkConnection.getInstance().addToRequestQueue(customRequest);
+                        }
+                        else {
+                            Context context = getApplicationContext();
+                            CharSequence text = getResources().getString(R.string.network_not_conected);
+                            int duration = Toast.LENGTH_LONG;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+                        }
                     }
                     else {
                         editTextEmail.requestFocus();
