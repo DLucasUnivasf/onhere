@@ -41,26 +41,7 @@
         android:text="@string/e_mail" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView6"
-        android:layout_marginStart="84dp"
-        android:layout_toEndOf="@+id/textViewInformation"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView6"
-        android:layout_alignStart="@+id/textView7"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-    <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/textViewEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/evento"
@@ -80,7 +61,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView12" >
+        android:layout_below="@+id/textViewEvent" >
 
         <!-- A RecyclerView with some commonly used attributes -->
         <android.support.v7.widget.RecyclerView
