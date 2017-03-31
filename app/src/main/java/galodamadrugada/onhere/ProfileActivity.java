@@ -33,7 +33,6 @@ public class ProfileActivity  extends AppCompatActivity {
     TextView        textViewInformation;
     TextView        textViewName;
     TextView        textViewEmail;
-    TextView        textViewEvent;
     ImageButton     imageButtonEditProfile;
 
     @Override
@@ -45,7 +44,6 @@ public class ProfileActivity  extends AppCompatActivity {
         textViewInformation     = (TextView) findViewById(R.id.textViewInformation);
         textViewName            = (TextView) findViewById(R.id.textViewName);
         textViewEmail           = (TextView) findViewById(R.id.textViewEmail);
-        textViewEvent           = (TextView) findViewById(R.id.textViewEvent);
         imageButtonEditProfile  = (ImageButton) findViewById(R.id.imageButtonEditProfile);
 
     }

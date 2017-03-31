@@ -11,14 +11,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
-
+import galodamadrugada.onhere.ListEventActivity;
+import galodamadrugada.onhere.R;
+import galodamadrugada.onhere.adapter.EventAdapter;
 import galodamadrugada.onhere.domain.Event;
+import galodamadrugada.onhere.interfaces.RecyclerViewOnClickListenerHack;
 
-/**
- * Created by UNIVASF on 30/03/2017.
- */
-
-/*
 public class EventFragment extends Fragment implements RecyclerViewOnClickListenerHack {
 
     private RecyclerView mRecyclerView;
@@ -29,7 +27,7 @@ public class EventFragment extends Fragment implements RecyclerViewOnClickListen
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_car, container, false);
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
         mRecyclerView.setHasFixedSize(true);
@@ -47,7 +45,7 @@ public class EventFragment extends Fragment implements RecyclerViewOnClickListen
                 EventAdapter adapter = (EventAdapter) mRecyclerView.getAdapter();
 
                 if (mList.size() == llm.findLastCompletelyVisibleItemPosition() + 1) {
-                    List<Event> listAux = ((MainActivity) getActivity()).getSetCarList(10);
+                    List<Event> listAux = ((ListEventActivity) getActivity()).getSetEventList(10);
 
                     for (int i = 0; i < listAux.size(); i++) {
                         adapter.addListItem(listAux.get(i), mList.size());
@@ -62,7 +60,7 @@ public class EventFragment extends Fragment implements RecyclerViewOnClickListen
         mRecyclerView.setLayoutManager(llm);
 
 
-        mList = ((MainActivity) getActivity()).getSetCarList(10);
+        mList = ((ListEventActivity) getActivity()).getSetEventList(10);
         EventAdapter adapter = new EventAdapter(getActivity(), mList);
         adapter.setRecyclerViewOnClickListenerHack(this);
         mRecyclerView.setAdapter( adapter );
@@ -79,4 +77,4 @@ public class EventFragment extends Fragment implements RecyclerViewOnClickListen
         adapter.removeListItem(position);
     }
 }
-*/
+

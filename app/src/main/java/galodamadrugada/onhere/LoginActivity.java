@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail      = (EditText)  findViewById(R.id.editTextEmail);
         editTextPass       = (EditText)  findViewById(R.id.editTextPass);
         buttonLogin        = (Button)    findViewById(R.id.buttonLogin);
-        textViewSignInUp     = (TextView)    findViewById(R.id.textViewSignInUp);
+        textViewSignInUp   = (TextView)  findViewById(R.id.textViewSignInUp);
         imageViewLogo      = (ImageView) findViewById(R.id.imageViewLogo);
         textViewForgotPass = (TextView)  findViewById(R.id.textViewForgotPass);
 
