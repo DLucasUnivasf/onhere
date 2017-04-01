@@ -86,86 +86,94 @@ public class RegisterActivity extends AppCompatActivity {
                     editTextPass2.setError(getResources().getString(R.string.password_not_match));
                 }
                 else {
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("fullname", editTextName.getText().toString());
-                    params.put("email", editTextEmail.getText().toString());
-                    params.put("password", editTextPass1.getText().toString());
+                    if (NetworkConnection.getInstance().isOnline()) {
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("fullname", editTextName.getText().toString());
+                        params.put("email", editTextEmail.getText().toString());
+                        params.put("password", editTextPass1.getText().toString());
 
-                    progressDialog.setMessage("Carregando...");
-                    showProgressDialog();
+                        progressDialog.setMessage("Carregando...");
+                        showProgressDialog();
 
-                    CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_USER, params, null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
+                        CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_USER, params, null,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
 
 
-                                    try {
-                                        if(response.getString("status").equals("408")) {
-                                            Log.i("CustomRequest", "Erro: " + response.toString());
-                                            hideProgressDialog();
+                                        try {
+                                            if (response.getString("status").equals("408")) {
+                                                Log.i("CustomRequest", "Erro: " + response.toString());
+                                                hideProgressDialog();
 
-                                            dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
-                                            dialogButton = getResources().getString(R.string.back);
-                                            dialogText = getResources().getString(R.string.register_email_already_exist);
+                                                dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
+                                                dialogButton = getResources().getString(R.string.back);
+                                                dialogText = getResources().getString(R.string.register_email_already_exist);
 
-                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                }
-                                            });
+                                                builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                    }
+                                                });
+                                            } else {
+                                                Log.i("CustomRequest", "Sucesso: " + response.toString());
+                                                hideProgressDialog();
+
+                                                dialogTitle = getResources().getString(R.string.register_success_title);
+                                                dialogButton = getResources().getString(R.string.ok);
+                                                dialogText = getResources().getString(R.string.register_success);
+
+                                                builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        Intent intent = new Intent();
+                                                        intent.setData(Uri.parse(editTextEmail.getText().toString()));
+
+                                                        setResult(RESULT_OK, intent);
+
+                                                        finish();
+                                                    }
+                                                });
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
 
-                                        else{
-                                            Log.i("CustomRequest", "Sucesso: " + response.toString());
-                                            hideProgressDialog();
+                                        LayoutInflater inflater = RegisterActivity.this.getLayoutInflater();
+                                        builder.setMessage(dialogText)
+                                                .setTitle(dialogTitle);
 
-                                            dialogTitle = getResources().getString(R.string.register_success_title);
-                                            dialogButton = getResources().getString(R.string.ok);
-                                            dialogText = getResources().getString(R.string.register_success);
-
-                                            builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    Intent intent = new Intent();
-                                                    intent.setData(Uri.parse(editTextEmail.getText().toString()));
-
-                                                    setResult(RESULT_OK, intent);
-
-                                                    finish();
-                                                }
-                                            });
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
                                     }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                        hideProgressDialog();
 
-                                    LayoutInflater inflater = RegisterActivity.this.getLayoutInflater();
-                                    builder.setMessage(dialogText)
-                                            .setTitle(dialogTitle);
+                                        Context context = getApplicationContext();
+                                        CharSequence text = getResources().getString(R.string.http_error);
+                                        int duration = Toast.LENGTH_SHORT;
 
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                        Toast toast = Toast.makeText(context, text, duration);
+                                        toast.show();
+                                    }
                                 }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
-                                    hideProgressDialog();
-
-                                    Context context = getApplicationContext();
-                                    CharSequence text = getResources().getString(R.string.http_error);
-                                    int duration = Toast.LENGTH_SHORT;
-
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
-                                }
-                            }
-                    );
-                    NetworkConnection.getInstance().addToRequestQueue(customRequest);
+                        );
+                        NetworkConnection.getInstance().addToRequestQueue(customRequest);
 
 
+                    }
+                    else {
+                        Context context = getApplicationContext();
+                        CharSequence text = getResources().getString(R.string.network_not_conected);
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
             }
         });

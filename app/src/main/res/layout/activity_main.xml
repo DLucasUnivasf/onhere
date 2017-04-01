@@ -7,11 +7,10 @@
     tools:context="galodamadrugada.onhere.MainActivity">
 
 
-
     <Button
         android:id="@+id/mainCheckInButton"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="208dp"
+        android:layout_height="53dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
