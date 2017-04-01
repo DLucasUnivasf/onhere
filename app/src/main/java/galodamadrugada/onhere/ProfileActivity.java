@@ -27,7 +27,7 @@ import org.w3c.dom.Text;
  * Created by UNIVASF on 14/03/2017.
  */
 
-public class ProfileActivity  extends AppCompatActivity{
+public class ProfileActivity  extends AppCompatActivity {
 
 
     TextView        textViewInformation;
@@ -35,13 +35,8 @@ public class ProfileActivity  extends AppCompatActivity{
     TextView        textViewEmail;
     ImageButton     imageButtonEditProfile;
 
-    RecyclerView                mRecyclerView;
-    RecyclerView.Adapter        mAdapter;
-    RecyclerView.LayoutManager  mLayoutManager;
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -51,19 +46,5 @@ public class ProfileActivity  extends AppCompatActivity{
         textViewEmail           = (TextView) findViewById(R.id.textViewEmail);
         imageButtonEditProfile  = (ImageButton) findViewById(R.id.imageButtonEditProfile);
 
-        mRecyclerView   = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use essa configuração para melhorar o desempenho se souber que as
-        // alterações no conteúdo não alteram o tamanho do layout do RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
-        // usar um linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        //mAdapter = new MyAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
     }
-
 }

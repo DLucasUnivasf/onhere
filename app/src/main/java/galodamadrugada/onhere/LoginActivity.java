@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail      = (EditText)  findViewById(R.id.editTextEmail);
         editTextPass       = (EditText)  findViewById(R.id.editTextPass);
         buttonLogin        = (Button)    findViewById(R.id.buttonLogin);
-        textViewSignInUp     = (TextView)    findViewById(R.id.textViewSignInUp);
+        textViewSignInUp   = (TextView)  findViewById(R.id.textViewSignInUp);
         imageViewLogo      = (ImageView) findViewById(R.id.imageViewLogo);
         textViewForgotPass = (TextView)  findViewById(R.id.textViewForgotPass);
 
@@ -138,15 +138,26 @@ public class LoginActivity extends AppCompatActivity {
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             Log.i("CustomRequest", "SUCCESSO: " + response.toString());
+                                            hideProgressDialog();
                                             try {
-                                                preferences.edit().putString("token", response.getString("token")).apply();
+                                                if (response.getString("status").equals(Consts.INVALID_PASSWORD)) {
+                                                    Context context = getApplicationContext();
+                                                    CharSequence text = getResources().getString(R.string.invalid_password);
+                                                    int duration = Toast.LENGTH_SHORT;
+                                                    Toast toast = Toast.makeText(context, text, duration);
+                                                    toast.show();
+                                                }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
+                                                try {
+                                                    preferences.edit().putString("token", response.getString("token")).apply();
+                                                    Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                                                    startActivity(goToMain);
+                                                    finish();
+                                                } catch (JSONException ex) {
+                                                    ex.printStackTrace();
+                                                }
                                             }
-                                            hideProgressDialog();
-                                            Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-                                            startActivity(goToMain);
-                                            finish();
                                         }
                                     },
                                     new Response.ErrorListener() {
