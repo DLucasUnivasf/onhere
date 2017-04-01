@@ -1,5 +1,6 @@
 package galodamadrugada.onhere;
 
+//########## IMPORTS ########################################################################
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -41,9 +42,11 @@ import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
 import galodamadrugada.onhere.util.Consts;
 
+
+//########## INÍCIO DA CLASSE ###############################################################
 public class EventRegisterActivity extends AppCompatActivity implements Button.OnClickListener{
 
-/////////////////////////////// VARIÁVEIS /////////////////////////////////
+//########## DECLARAÇÃO VARIÁVEIS ###########################################################
     private Calendar calendar;
     private int year, month, day, hour, minute, selector;
     private EditText editTextEventName, editTextDelay, editTextDescription;
@@ -54,53 +57,60 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
     private static final int REQUEST_CODE = 1;
     private Bundle bundle;
 
-
-
-    String dateStart, hourStart, dateEnd, hourEnd;
+    String dateStart, hourStart, dateEnd, hourEnd, dialogTitle, dialogText, dialogButton;
 
     ProgressDialog progressDialog;
-
-    String dialogTitle, dialogText, dialogButton;
 
     HashMap<String, String> params = new HashMap<>();
     HashMap<String, String> headers = new HashMap<>();
 
+//########## INÍCIO DOS MÉTODOS ###############################################################
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_register);
 
-/////////////////////////////// INICIALIZAÇÃO /////////////////////////////////
-        final SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
+//########## INICIALIZAÇÃO DAS VARIÁVEIS #######################################################
+        final SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE); //TOKEN
 
+        //EXIBIÇÃO DOS DADO DO EVENTO
         editTextEventName = (EditText) findViewById(R.id.editTextEventName);
         editTextDelay = (EditText) findViewById(R.id.editTextDelay);
         editTextDescription = (EditText) findViewById(R.id.editTextDescription);
 
+        //DATE PICKER'S
         buttonDate = (Button) findViewById(R.id.buttonDate);
         buttonDate.setOnClickListener((View.OnClickListener) this);
-
-        buttonHour = (Button) findViewById(R.id.buttonHour);
-        buttonHour.setOnClickListener((View.OnClickListener) this);
 
         buttonEndDate = (Button) findViewById(R.id.buttonDateEnd);
         buttonEndDate.setOnClickListener((View.OnClickListener) this);
 
+        textViewDate = (TextView) findViewById(R.id.textViewDate);
+        textViewDateEnd = (TextView) findViewById(R.id.textViewDateEnd);
+
+        //TIME PICKER'S
+        buttonHour = (Button) findViewById(R.id.buttonHour);
+        buttonHour.setOnClickListener((View.OnClickListener) this);
+
         buttonEndHour = (Button) findViewById(R.id.buttonHourEnd);
         buttonEndHour.setOnClickListener((View.OnClickListener) this);
 
-        textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewHour = (TextView) findViewById(R.id.textViewHour);
-        textViewDateEnd = (TextView) findViewById(R.id.textViewDateEnd);
         textViewHourEnd = (TextView) findViewById(R.id.textViewHourEnd);
 
+        //PLACE PICKER
         buttonAddress = (Button) findViewById(R.id.buttonAddress);
-
         textViewAddress = (TextView) findViewById(R.id.textViewAddress);
+        buttonAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToPlacePicker = new Intent(getApplicationContext(), PlacePickerActivity.class);
+                startActivityForResult(goToPlacePicker, REQUEST_CODE);
+            }
+        });
 
-        buttonRegisterEvent = (Button) findViewById(R.id.buttonRegisterEvent);
-
+        //DADOS DE DATA E HORA
         calendar = Calendar.getInstance();
 
         year = calendar.get(Calendar.YEAR);
@@ -109,30 +119,32 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
+        //CONFIGURA O PROGRESS DIALOG
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
+        //SELETOR DA TEXT VIEW QUE SERÁ ALTERADA PELO PICKER
         selector = 3;
+
+        //INICIA AS TEXT VIEWS COM OS DADOS ATUAIS
         showDate(year, month+1, day);
         showTime(hour, minute);
 
-        buttonAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToPlacePicker = new Intent(getApplicationContext(), PlacePickerActivity.class);
-                startActivityForResult(goToPlacePicker, REQUEST_CODE);
-                //finish();
-            }
-        });
 
+        //BOTÃO DE CADASTRO
+        buttonRegisterEvent = (Button) findViewById(R.id.buttonRegisterEvent);
         buttonRegisterEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //DEFINE OS FORMATOS DE DATA E HORA PARA FIM DE COMPARAÇÃO
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+
+                //INICIALIZA AS VARIÁVEIS QUE SERÃO COMPARADAS PARA FIM DE CONSISTÊNCIA DE DADOS
                 Date inTime = null, outTime = null, inDate = null, outDate = null;
 
+                //COLOCA OS DADOS ATUAIS NAS VARIÁVEIS ACIMA
                 try {
                     inDate = sdf2.parse(textViewDate.getText().toString());
                 } catch (ParseException e) {
@@ -158,18 +170,22 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 assert outDate != null;
                 assert inDate != null;
 
+                //VERIFICA SE O NOME DO EVENTO FOI PREENCHIDO
                 if (editTextEventName.getText().toString().equals("")) {
                     editTextEventName.requestFocus();
                     editTextEventName.setError(getResources().getString(R.string.required_field));
                 }
+                //VERIFICA SE O ATRASO MÁXIMO DO EVENTO FOI PREENCHIDO
                 else if (editTextDelay.getText().toString().equals("")) {
                     editTextDelay.requestFocus();
                     editTextDelay.setError(getResources().getString(R.string.required_field));
                 }
+                //VERIFICA SE A DESCRIÇÃO DO EVENTO FOI PREENCHIDA
                 else if (editTextDescription.getText().toString().equals("")) {
                     editTextDescription.requestFocus();
                     editTextDescription.setError(getResources().getString(R.string.required_field));
                 }
+                //VERIFICA SE A DATA INICIAL DO EVENTO É ANTERIOR OU IGUAL À DATA FINAL
                 else if (inDate.after(outDate)) {
                         Context context = getApplicationContext();
                         CharSequence text = getResources().getString(R.string.difference_date);
@@ -178,6 +194,7 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
                 }
+                //VERIFICA SE A HORA INICIAL DO EVENTO É ANTERIOR À HORA FINAL
                 else if ((outDate.equals(inDate)) && (inTime.compareTo(outTime) != -1)) {
                         Context context = getApplicationContext();
                         CharSequence text = getResources().getString(R.string.difference_hour);
@@ -186,6 +203,7 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                         Toast toast = Toast.makeText(context, text, duration);
                         toast.show();
                 }
+                //VERIFICA SE O ENDEREÇO DO EVENTO FOI PREENCHIDO
                 else if (textViewAddress.getText().toString().equals("")) {
                     textViewAddress.requestFocus();
 
@@ -196,8 +214,10 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
+                //INICIA A REQUISIÇÃO AO SERVIDOR SE TODOS OS TESTES ACIMA FOREM SATISFEITOS
                 else{
                     if (NetworkConnection.getInstance().isOnline()) {
+                        //INFORMA OS PARÂMETROS DA REQUISIÇÃO
                         params.put("desc", editTextDescription.getText().toString());
                         params.put("nome", editTextEventName.getText().toString());
                         params.put("dtin", dateStart + hourStart);
@@ -206,22 +226,23 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                         params.put("latitude", bundle.getString("latitude"));
                         params.put("longitude", bundle.getString("longitude"));
 
-
                         headers.put("x-access-token", preferences.getString("token", ""));
 
+                        //MOSTRA O PROGRESS DIALOG
                         progressDialog.setMessage("Carregando...");
                         showProgressDialog();
 
+                        //EXECUTA A REQUISIÇÃO DE CADASTRO DE EVENTO
                         CustomRequest customRequest = new CustomRequest(Request.Method.POST, Consts.SERVER + Consts.NEW_EVENT, params, headers,
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
 
+                                        //CRIA UM NOVO ALERT DIALOG COM INFORMAÇÕES QUE DEPENDEM DA RESPOSTA DO SERVIDOR
                                         AlertDialog.Builder builder = new AlertDialog.Builder(EventRegisterActivity.this);
 
-
                                         try {
-
+                                            //TRATA O ERRO DE CÓDIGO 418: Erro ao cadastrar.
                                             if (response.getString("status").equals("418")) {
                                                 Log.i("CustomRequest", "Erro: " + response.toString());
                                                 hideProgressDialog();
@@ -234,8 +255,11 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                                                     public void onClick(DialogInterface dialog, int id) {
                                                     }
                                                 });
+                                            //SE O SERVIDOR NÃO RETORNAR ERRO, CHAMA A TELA DE PERFIL
                                             } else {
                                                 Log.i("CustomRequest", "Sucesso: " + response.toString());
+
+                                                //ESCONDE O PROGRESS DIALOG
                                                 hideProgressDialog();
 
                                                 dialogTitle = getResources().getString(R.string.event_register_success_title);
@@ -254,6 +278,7 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                                             e.printStackTrace();
                                         }
 
+                                        //MOSTRA O DIALOG CRIADO ANTERIORMENTE
                                         LayoutInflater inflater = EventRegisterActivity.this.getLayoutInflater();
                                         builder.setMessage(dialogText)
                                                 .setTitle(dialogTitle);
@@ -262,6 +287,8 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                                         dialog.show();
                                     }
                                 },
+
+                                //TRATA ERROS HTTP RETORNADOS PELO SERVIDOR
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
@@ -294,6 +321,7 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         });
     }
 
+    //FUNÇÃO QUE CRIA OS DIALOGS DO PLACE PICKER E TIME PICKER DE ACORDO COM O BOTÃO PRESSIONADO
     @Override
     protected Dialog onCreateDialog(int id) {
 
@@ -302,18 +330,26 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, mDateSetListener, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 return datePickerDialog;
+
             case HOUR_DIALOG_ID:
                 return new TimePickerDialog(this, mTimeSetListener, hour, minute, DateFormat.is24HourFormat(this));
         }
         return null;
     }
 
+    //FUNÇÕES QUE MOSTRAM NA TELA O VALOR SELECIONADO NO DATE PICKER E FORMATAM O DADO DA REQUISIÇÃO DE ACORDO COM O BOTÃO PRESSIONADO
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int month, int day) {
+
+            //BOTÃO DE DATA INICIAL PRESSIONADO
             if(selector == 1)
                 dateStart = String.format("%04d-%02d-%02dT", year, month+1, day);
+
+            //BOTÃO DE DATA FINAL PRESSIONADO
             if(selector == 2)
                 dateEnd = String.format("%04d-%02d-%02dT", year, month+1, day);
+
+            //INICIAL
             if(selector == 3) {
                 dateStart = String.format("%04d-%02d-%02dT", year, month + 1, day);
                 dateEnd = String.format("%04d-%02d-%02dT", year, month + 1, day);
@@ -323,65 +359,97 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         }
     };
 
+    private void showDate(int year, int month, int day) {
+
+        //BOTÃO DATA INICIAL PRESSIONADO
+        if(selector == 1)
+            textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+
+        //BOTÃO DATA FINAL PRESSIONADO
+        if(selector == 2)
+            textViewDateEnd.setText(String.format("%02d/%02d/%04d", day, month, year));
+
+        //INICIAL
+        if(selector == 3){
+            textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
+            textViewDateEnd.setText(String.format("%02d/%02d/%04d", day, month, year));
+        }
+    }
+
+
+    //FUNÇÕES QUE MOSTRAM NA TELA O VALOR SELECIONADO NO TIME PICKER E FORMATAM O DADO DA REQUISIÇÃO DE ACORDO COM O BOTÃO PRESSIONADO
     private TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            //BOTÃO HORA INICIAL PRESSIONADO
             if(selector == 1)
                 hourStart = String.format("%02d:%02d.00Z", hourOfDay, minute);
+
+            //BOTÃO HORA FINAL PRESSIONADO
             if(selector == 2)
                 hourEnd = String.format("%02d:%02d.00Z", hourOfDay, minute);
+
+            //INICIAL
             if(selector == 3) {
                 hourStart = String.format("%02d:%02d.00Z", hourOfDay, minute);
                 hourEnd = String.format("%02d:%02d.00Z", hourOfDay, minute);
             }
+
             showTime(hourOfDay, minute);
         }
     };
 
-   private void showDate(int year, int month, int day) {
-       if(selector == 1)
-           textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
-
-       if(selector == 2)
-           textViewDateEnd.setText(String.format("%02d/%02d/%04d", day, month, year));
-
-       if(selector == 3){
-           textViewDate.setText(String.format("%02d/%02d/%04d", day, month, year));
-           textViewDateEnd.setText(String.format("%02d/%02d/%04d", day, month, year));
-           }
-    }
 
     private void showTime(int hour, int minute) {
+
+        //BOTÃO HORA INICIAL PRESSIONADO
         if(selector == 1)
             textViewHour.setText(String.format("%02d:%02d", hour, minute));
+
+        //BOTÃO HORA FINAL PRESSIONADO
         if(selector == 2)
             textViewHourEnd.setText(String.format("%02d:%02d", hour, minute));
+
+        //INICIAL
         if(selector == 3){
             textViewHour.setText(String.format("%02d:%02d", hour, minute));
             textViewHourEnd.setText(String.format("%02d:%02d", hour, minute));
         }
     }
 
+
+    //FUNÇÃO QUE EXIBE O PICKER DE ACORDO COM O BOTÃO PRESSIONADO
    @Override
     public void onClick(View v) {
+
+       //BOTÃO DATA INICIAL PRESSIONADO
        if (v == buttonDate) {
            selector = 1;
            showDialog(DATE_DIALOG_ID);
        }
-       if (v == buttonHour) {
-           selector = 1;
-           showDialog(HOUR_DIALOG_ID);
-       }
-       if (v == buttonEndHour) {
-           selector = 2;
-           showDialog(HOUR_DIALOG_ID);
-       }
+
+       //BOTÃO DATA FINAL PRESSIONADO
        if (v == buttonEndDate) {
            selector = 2;
            showDialog(DATE_DIALOG_ID);
        }
+
+       //BOTÃO HORA INICIAL PRESSIONADO
+       if (v == buttonHour) {
+           selector = 1;
+           showDialog(HOUR_DIALOG_ID);
+       }
+
+       //BOTÃO HORA FINAL PRESSIONADO
+       if (v == buttonEndHour) {
+           selector = 2;
+           showDialog(HOUR_DIALOG_ID);
+       }
+
     }
 
+    //DEFINIÇÃO DAS FUNÇÕES DO PROGRESS DIALOG
     private void showProgressDialog() {
         if (!progressDialog.isShowing())
             progressDialog.show();
@@ -392,6 +460,7 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
             progressDialog.hide();
     }
 
+    //FUNÇÃO QUE EXIBE OS DADOS DO LOCAL SELECIONADO NO PLACE PICKER
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intentPicker) {
         if(requestCode==1) {
