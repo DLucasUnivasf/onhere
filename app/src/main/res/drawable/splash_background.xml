@@ -4,7 +4,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/splash"
-            android:scaleWidth=""/>
+            android:src="@mipmap/splash"/>
     </item>
 </layer-list>
