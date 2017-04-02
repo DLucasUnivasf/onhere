@@ -4,6 +4,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/logo_hi_res_256"/>
+            android:src="@mipmap/splash"
+            android:scaleWidth=""/>
     </item>
 </layer-list>
