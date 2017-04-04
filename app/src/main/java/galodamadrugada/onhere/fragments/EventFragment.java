@@ -74,7 +74,7 @@ public class EventFragment extends Fragment implements RecyclerViewOnClickListen
         Toast.makeText(getActivity(), "Position: "+position, Toast.LENGTH_SHORT).show();
 
         EventAdapter adapter = (EventAdapter) mRecyclerView.getAdapter();
-        adapter.removeListItem(position);
+
     }
 }
 

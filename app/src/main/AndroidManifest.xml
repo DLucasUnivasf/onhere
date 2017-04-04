@@ -47,7 +47,8 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".EventActivity" />
         <activity android:name=".EventInfoActivity" />
-        <activity android:name=".PlacePickerActivity"></activity>
+        <activity android:name=".ListEventActivity" />
+        <activity android:name=".PlacePickerActivity" />
     </application>
 
 </manifest>
