@@ -49,4 +49,6 @@
     <string name="required_address">Por favor, selecione um endereço.</string>
     <string name="invalid_password">Senha inválida.</string>
     <string name="required_location_permission">Por favor, permita o uso da localização.</string>
+    <string name="email_not_found">Email não cadastrado.</string>
+    <string name="server_error">Encontramos algum erro nos nossos servidores. Por favor tente novamente mais tarde.</string>
 </resources>

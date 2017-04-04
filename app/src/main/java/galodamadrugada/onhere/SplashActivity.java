@@ -72,6 +72,13 @@ public class SplashActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 Log.i("CustomRequest", "ERRO NO REQUEST " + error.getMessage());
+                                Context context = getApplicationContext();
+                                CharSequence text = getResources().getString(R.string.server_error);
+                                int duration = Toast.LENGTH_LONG;
+
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                                goToLogin();
                             }
                         }
                 );

@@ -141,11 +141,12 @@ public class LoginActivity extends AppCompatActivity {
                                             hideProgressDialog();
                                             try {
                                                 if (response.getString("status").equals(Consts.INVALID_PASSWORD)) {
-                                                    Context context = getApplicationContext();
-                                                    CharSequence text = getResources().getString(R.string.invalid_password);
-                                                    int duration = Toast.LENGTH_SHORT;
-                                                    Toast toast = Toast.makeText(context, text, duration);
-                                                    toast.show();
+                                                    editTextPass.setError(getResources().getString(R.string.invalid_password));
+                                                    editTextPass.requestFocus();
+                                                }
+                                                else if(response.getString("status").equals(Consts.EMAIL_NOT_FOUND)) {
+                                                    editTextEmail.setError(getResources().getString(R.string.email_not_found));
+                                                    editTextPass.requestFocus();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
