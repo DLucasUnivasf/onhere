@@ -27,7 +27,6 @@ import galodamadrugada.onhere.fragments.EventFragment;
 
 public class ListEventActivity extends AppCompatActivity{
 
-    private static String TAG = "LOG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +45,12 @@ public class ListEventActivity extends AppCompatActivity{
 
 
     public List<Event> getSetEventList(int qtd){
-        String[] nome = new String[]{"Gallardo", "Vyron", "Corvette", "Pagani Zonda", "Porsche 911 Carrera", "BMW 720i", "DB77", "Mustang", "Camaro", "CT6"};
-        String[] data = new String[]{"Lamborghini", " bugatti", "Chevrolet", "Pagani", "Porsche", "BMW", "Aston Martin", "Ford", "Chevrolet", "Cadillac"};
+        String[] nomeEvento = new String[]{"Event A", "Event B", "Event C", "Pagani Zonda", "Porsche 911 Carrera", "BMW 720i", "DB77", "Mustang", "Camaro", "CT6"};
+        String[] dataEvento = new String[]{"Lamborghini", " bugatti", "Chevrolet", "Pagani", "Porsche", "BMW", "Aston Martin", "Ford", "Chevrolet", "Cadillac"};
         List<Event> listAux = new ArrayList<>();
 
         for(int i = 0; i < qtd; i++){
-            Event c = new Event( nome[i % nome.length], data[ i % data.length ] );
+            Event c = new Event( nomeEvento[i % nomeEvento.length], dataEvento[ i % dataEvento.length ] );
             listAux.add(c);
         }
         return(listAux);

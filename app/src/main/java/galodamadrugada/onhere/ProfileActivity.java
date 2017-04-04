@@ -3,6 +3,7 @@ package galodamadrugada.onhere;
 import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -34,6 +36,7 @@ public class ProfileActivity  extends AppCompatActivity {
     TextView        textViewName;
     TextView        textViewEmail;
     ImageButton     imageButtonEditProfile;
+    Button          buttonViewEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,16 @@ public class ProfileActivity  extends AppCompatActivity {
         textViewName            = (TextView) findViewById(R.id.textViewName);
         textViewEmail           = (TextView) findViewById(R.id.textViewEmail);
         imageButtonEditProfile  = (ImageButton) findViewById(R.id.imageButtonEditProfile);
+        buttonViewEvents        = (Button)  findViewById(R.id.buttonViewEvents);
+
+
+        buttonViewEvents.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v ) {
+                Intent intent   =   new Intent(ProfileActivity.this, ListEventActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }
