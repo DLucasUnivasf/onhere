@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-
+import android.util.Log;
+import android.app.ProgressDialog;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -30,10 +31,16 @@ public class PlacePickerActivity extends AppCompatActivity implements GoogleApiC
     private static LatLngBounds bounds = new LatLngBounds(
             new LatLng(0, 0), new LatLng(0, 0));
 
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_picker);
+
+        //CONFIGURA O PROGRESS DIALOG
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -48,7 +55,6 @@ public class PlacePickerActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == PLACE_PICKER_REQUEST
                 && resultCode == Activity.RESULT_OK) {
 
@@ -68,7 +74,9 @@ public class PlacePickerActivity extends AppCompatActivity implements GoogleApiC
 
 
         } else {
-            super.onActivityResult(requestCode, resultCode, data);
+            Intent intentPicker = new Intent();
+            setResult(RESULT_CANCELED, intentPicker);
+            finish();
         }
     }
 
@@ -84,6 +92,8 @@ public class PlacePickerActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     public void onConnected(Bundle connectionHint) {
+//        //ESCONDE O PROGRESS DIALOG
+//        hideProgressDialog();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -103,13 +113,28 @@ public class PlacePickerActivity extends AppCompatActivity implements GoogleApiC
                     new PlacePicker.IntentBuilder();
             intentBuilder.setLatLngBounds(bounds);
             Intent intent = intentBuilder.build(PlacePickerActivity.this);
+
+            //MOSTRA O PROGRESS DIALOG
+            progressDialog.setMessage("Carregando...");
+            showProgressDialog();
+
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
-            //finish();
 
         } catch (GooglePlayServicesRepairableException
                 | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
+    }
+
+    //DEFINIÇÃO DAS FUNÇÕES DO PROGRESS DIALOG
+    private void showProgressDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.hide();
     }
 
     @Override
@@ -121,4 +146,5 @@ public class PlacePickerActivity extends AppCompatActivity implements GoogleApiC
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }

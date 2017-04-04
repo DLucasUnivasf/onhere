@@ -1,6 +1,7 @@
 package galodamadrugada.onhere;
 
 //########## IMPORTS ########################################################################
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,7 +10,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +45,8 @@ import java.util.HashMap;
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
 import galodamadrugada.onhere.util.Consts;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
 //########## INÍCIO DA CLASSE ###############################################################
@@ -105,8 +111,30 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         buttonAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToPlacePicker = new Intent(getApplicationContext(), PlacePickerActivity.class);
-                startActivityForResult(goToPlacePicker, REQUEST_CODE);
+                // Se não possui permissão
+                if (ContextCompat.checkSelfPermission(EventRegisterActivity.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // Verifica se já mostramos o alerta e o usuário negou na 1ª vez.
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(EventRegisterActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        // Caso o usuário tenha negado a permissão anteriormente, e não tenha marcado o check "nunca mais mostre este alerta"
+                        // Podemos mostrar um alerta explicando para o usuário porque a permissão é importante.
+                        Context context = getApplicationContext();
+                        CharSequence text = getResources().getString(R.string.required_location_permission);
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    } else {
+                        // Solicita a permissão
+                        ActivityCompat.requestPermissions(EventRegisterActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
+                    }
+                } else {
+                    // Tudo OK, podemos prosseguir.
+
+
+                    Intent goToPlacePicker = new Intent(getApplicationContext(), PlacePickerActivity.class);
+                    startActivityForResult(goToPlacePicker, REQUEST_CODE);
+                }
+
             }
         });
 
@@ -256,7 +284,8 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                                                     }
                                                 });
                                             //SE O SERVIDOR NÃO RETORNAR ERRO, CHAMA A TELA DE PERFIL
-                                            } else {
+                                            }
+                                            else {
                                                 Log.i("CustomRequest", "Sucesso: " + response.toString());
 
                                                 //ESCONDE O PROGRESS DIALOG
@@ -468,6 +497,31 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 bundle = intentPicker.getExtras();
 
                 textViewAddress.setText(bundle.getString("name") + " - " + bundle.getString("address"));
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCodePermission,String permissions[], int[] grantResults) {
+        switch (requestCodePermission) {
+            case 0: {
+                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)      {
+                    // Usuário aceitou a permissão!
+                    Intent goToPlacePicker = new Intent(getApplicationContext(), PlacePickerActivity.class);
+                    startActivityForResult(goToPlacePicker, REQUEST_CODE);
+                } else {
+                    // Usuário negou a permissão.
+                    // Não podemos utilizar esta funcionalidade.
+                    Log.i("Erro", "permissão negada");
+
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.required_location_permission);
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                return;
             }
         }
     }
