@@ -6,7 +6,7 @@ public class Consts {
     public static final String LOGIN          = "api/usuario/login";
     public static final String NEW_USER       = "api/usuario/novo";
     public static final String NEW_EVENT      = "api/evento/novo";
-    public static final String CHECK_IN       = "api/usuario/evento/entrar";
+    public static final String CHECK_IN       = "api/evento/entrar";
     public static final String LIST_EVENTS    = "api/usuario/evento/lista";
     public static final String LIST_MY_EVENTS = "api/usuario/evento/mine";
     public static final String CHECK_TOKEN    = "api/token/valida";
