@@ -55,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent goToProfile = new Intent(this,ProfileActivity.class);
                 startActivity(goToProfile);
                 break;
+
+            case R.id.main_menu_goToAbout:
+                Intent goToAbout = new Intent(this,AboutActivty.class);
+                startActivity(goToAbout);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

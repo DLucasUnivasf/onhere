@@ -11,6 +11,12 @@
         android:title="profile"
         android:orderInCategory="100"
         app:showAsAction="always">
-
     </item>
+
+    <item
+        android:id="@+id/main_menu_goToAbout"
+        android:icon="@drawable/ic_info_icon"
+        android:orderInCategory="101"
+        android:title="profile"
+        app:showAsAction="always"></item>
 </menu>

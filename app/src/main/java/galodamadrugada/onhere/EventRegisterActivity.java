@@ -158,6 +158,9 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
         showDate(year, month+1, day);
         showTime(hour, minute);
 
+        dateStart = String.format("%04d-%02d-%02dT", year, month+1, day);
+        dateEnd = String.format("%04d-%02d-%02dT", year, month+1, day);
+        hourStart = String.format("%02d:%02d:00", hour, minute);
 
         //BOTÃO DE CADASTRO
         buttonRegisterEvent = (Button) findViewById(R.id.buttonRegisterEvent);
@@ -413,16 +416,16 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
 
             //BOTÃO HORA INICIAL PRESSIONADO
             if(selector == 1)
-                hourStart = String.format("%02d:%02d.00Z", hourOfDay, minute);
+                hourStart = String.format("%02d:%02d:00", hourOfDay, minute);
 
             //BOTÃO HORA FINAL PRESSIONADO
             if(selector == 2)
-                hourEnd = String.format("%02d:%02d.00Z", hourOfDay, minute);
+                hourEnd = String.format("%02d:%02d:00", hourOfDay, minute);
 
             //INICIAL
             if(selector == 3) {
-                hourStart = String.format("%02d:%02d.00Z", hourOfDay, minute);
-                hourEnd = String.format("%02d:%02d.00Z", hourOfDay, minute);
+                hourStart = String.format("%02d:%02d:00", hourOfDay, minute);
+                hourEnd = String.format("%02d:%02d:00", hourOfDay, minute);
             }
 
             showTime(hourOfDay, minute);

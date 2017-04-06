@@ -57,4 +57,6 @@
     <string name="view">Visualizar</string>
     <string name="email_not_found">Email não cadastrado.</string>
     <string name="server_error">Encontramos algum erro nos nossos servidores. Por favor tente novamente mais tarde.</string>
+    <string name="version">Versão 1.0.0</string>
+    <string name="repository"><a href="https://github.com/esron/onhere">onHere</a></string>
 </resources>
