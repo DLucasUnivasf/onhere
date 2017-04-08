@@ -140,13 +140,9 @@ public class LoginActivity extends AppCompatActivity {
                                             Log.i("CustomRequest", "SUCCESSO: " + response.toString());
                                             hideProgressDialog();
                                             try {
-                                                if (response.getString("status").equals(Consts.INVALID_PASSWORD)) {
-                                                    editTextPass.setError(getResources().getString(R.string.invalid_password));
-                                                    editTextPass.requestFocus();
-                                                }
-                                                else if(response.getString("status").equals(Consts.EMAIL_NOT_FOUND)) {
-                                                    editTextEmail.setError(getResources().getString(R.string.email_not_found));
-                                                    editTextPass.requestFocus();
+                                                if (response.getString("status").equals(Consts.INVALID_PASSWORD_OR_EMAIL)) {
+                                                    editTextPass.setError(getResources().getString(R.string.invalid_password_or_email));
+                                                    editTextEmail.setError(getResources().getString(R.string.invalid_password_or_email));
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();

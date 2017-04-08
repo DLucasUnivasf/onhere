@@ -7,8 +7,8 @@ public class Consts {
     public static final String NEW_USER       = "api/usuario/novo";
     public static final String NEW_EVENT      = "api/evento/novo";
     public static final String CHECK_IN       = "api/evento/entrar";
-    public static final String LIST_EVENTS    = "api/usuario/evento/lista";
-    public static final String LIST_MY_EVENTS = "api/usuario/evento/mine";
+    public static final String LIST_EVENTS    = "api/evento/lista";
+    public static final String LIST_MY_EVENTS = "api/evento/mine";
     public static final String CHECK_TOKEN    = "api/token/valida";
 
     // Strings constantes do app
@@ -17,7 +17,7 @@ public class Consts {
     // Códigos de erro
     public static final String URL_NOT_FOUND               = "404";
     public static final String EMAIL_NOT_FOUND             = "405";
-    public static final String INVALID_PASSWORD            = "406";
+    public static final String INVALID_PASSWORD_OR_EMAIL   = "406";
     public static final String EMPTY_EMAIL_OR_PASSWORD     = "407";
     public static final String EMAIL_ALREADY_USED          = "408";
     public static final String USER_REGISTER_SUCCESS       = "409";
