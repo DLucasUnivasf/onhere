@@ -38,6 +38,7 @@ public class ProfileActivity  extends AppCompatActivity {
     ImageButton     imageButtonEditProfile;
     Button          buttonViewEvents;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -58,6 +59,8 @@ public class ProfileActivity  extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
     }
 }
