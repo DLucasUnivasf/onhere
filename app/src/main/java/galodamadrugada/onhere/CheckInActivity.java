@@ -1,7 +1,6 @@
 package galodamadrugada.onhere;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,13 +59,14 @@ public class CheckInActivity extends AppCompatActivity {
                     }else{
                         HashMap<String, String> header = new HashMap<>();
                         header.put("x-access-token", preferences.getString("token",""));
-                        Log.i("TokenCheckin","o token eh:  " + header.get("token"));
+
+                        Log.i("TokenCheckin","o token eh:  " + header.get("x-access-token"));
 
                         progressDialog.setMessage("Fazendo Checkin...");
                         progressDialog.show();
 
                         if (NetworkConnection.getInstance().isOnline()) {
-                            CustomRequest customRequest = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.CHECK_IN, null, header,
+                            CustomRequest customRequest = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.CHECK_IN + "?chave="+ eventCode, null, header,
 
                                     new Response.Listener<JSONObject>() {
                                         @Override

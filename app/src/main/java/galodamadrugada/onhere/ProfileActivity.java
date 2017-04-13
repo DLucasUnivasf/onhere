@@ -1,30 +1,14 @@
 package galodamadrugada.onhere;
 
-import android.app.ListActivity;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -34,12 +18,10 @@ import com.android.volley.VolleyError;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletionService;
 
 import galodamadrugada.onhere.adapter.EventAdapter;
 import galodamadrugada.onhere.domain.Event;
@@ -163,9 +145,7 @@ public class ProfileActivity  extends AppCompatActivity {
 
             }
         });
-
         NetworkConnection.getInstance().addToRequestQueue(requestMyEvents);
         NetworkConnection.getInstance().addToRequestQueue(requestOthersEvents);
-
     }
 }
