@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,12 +71,13 @@ public class ProfileActivity  extends AppCompatActivity {
         textViewName            = (TextView)     findViewById(R.id.textViewName);
         textViewEmail           = (TextView)     findViewById(R.id.textViewEmail);
         imageButtonEditProfile  = (ImageButton)  findViewById(R.id.imageButtonEditProfile);
-        recyclerView            = (RecyclerView) findViewById(R.id.recyclreView);
+        recyclerView            = (RecyclerView) findViewById(R.id.recyclerView);
         eventAdapter            = new EventAdapter(events);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
 
         prepareEventData();
@@ -86,7 +88,7 @@ public class ProfileActivity  extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
         headers.put("x-access-token", preferences.getString("token", ""));
 
-        CustomRequest request = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.LIST_MY_EVENTS,
+        CustomRequest requestMyEvents = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.LIST_MY_EVENTS,
                 null, headers,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -123,7 +125,47 @@ public class ProfileActivity  extends AppCompatActivity {
 
             }
         });
-        NetworkConnection.getInstance().addToRequestQueue(request);
+
+        CustomRequest requestOthersEvents = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.LIST_EVENTS,
+                null, headers,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONArray jsonArray = new JSONArray();
+
+                        Log.i("CustomRequest", "response: " + response.toString());
+
+                        try {
+                            jsonArray = response.getJSONArray("eventos");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        for(int i = 0; i < jsonArray.length(); i++) {
+                            Event event = new Event();
+
+                            try {
+                                event.setName(jsonArray.getJSONObject(i).getString("nome"));
+                                event.setId(jsonArray.getJSONObject(i).getString("chave"));
+                                event.setDescription(jsonArray.getJSONObject(i).getString("descricao"));
+
+                                events.add(event);
+
+                                eventAdapter.notifyDataSetChanged();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        NetworkConnection.getInstance().addToRequestQueue(requestMyEvents);
+        NetworkConnection.getInstance().addToRequestQueue(requestOthersEvents);
 
     }
 }

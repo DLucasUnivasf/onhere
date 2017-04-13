@@ -6,4 +6,6 @@
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
+    <color name="description">#999999</color>
+    <color name="name">#222222</color>
 </resources>
