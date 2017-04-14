@@ -1,5 +1,6 @@
 package galodamadrugada.onhere;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +9,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,6 +31,7 @@ import galodamadrugada.onhere.domain.Event;
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
 import galodamadrugada.onhere.util.Consts;
+import galodamadrugada.onhere.util.RecyclerTouchListener;
 
 /**
  * Created by UNIVASF on 14/03/2017.
@@ -61,6 +65,24 @@ public class ProfileActivity  extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Event event = events.get(position);
+                Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
+
+                intent.putExtra("name", event.getName());
+                intent.putExtra("id", event.getId());
+                intent.putExtra("description", event.getDescription());
+
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         prepareEventData();
     }
