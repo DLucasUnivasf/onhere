@@ -273,21 +273,35 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                                         AlertDialog.Builder builder = new AlertDialog.Builder(EventRegisterActivity.this);
 
                                         try {
-                                            //TRATA O ERRO DE CÓDIGO 418: Erro ao cadastrar.
-                                            if (response.getString("status").equals("418")) {
+                                            //TRATA O ERRO DE CÓDIGO 420: Formato de data inválido.
+                                            if (response.getString("status").equals("420")) {
                                                 Log.i("CustomRequest", "Erro: " + response.toString());
                                                 hideProgressDialog();
 
                                                 dialogTitle = getResources().getString(R.string.register_email_already_exist_title);
                                                 dialogButton = getResources().getString(R.string.back);
-                                                dialogText = getResources().getString(R.string.register_email_already_exist);
+                                                dialogText = getResources().getString(R.string.invalid_date);
 
                                                 builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
                                                     public void onClick(DialogInterface dialog, int id) {
                                                     }
                                                 });
-                                            //SE O SERVIDOR NÃO RETORNAR ERRO, CHAMA A TELA DE PERFIL
                                             }
+                                            //TRATA O ERRO DE CÓDIGO 421: Erro ao tentar cadastrar o evento.
+                                            else if (response.getString("status").equals("421")) {
+                                                Log.i("CustomRequest", "Erro: " + response.toString());
+                                                hideProgressDialog();
+
+                                                dialogTitle = getResources().getString(R.string.server_error);
+                                                dialogButton = getResources().getString(R.string.back);
+                                                dialogText = getResources().getString(R.string.invalid_date);
+
+                                                builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                    }
+                                                });
+                                            }
+                                            //SE O SERVIDOR NÃO RETORNAR ERRO, CHAMA A TELA DE PERFIL
                                             else {
                                                 Log.i("CustomRequest", "Sucesso: " + response.toString());
 

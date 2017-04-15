@@ -143,6 +143,20 @@ public class RegisterActivity extends AppCompatActivity {
                                                     }
                                                 });
                                             }
+                                            //TRATA O ERRO DE CÓDIGO 418: Erro ao tentar cadastrar usuário.
+                                            if (response.getString("status").equals("418")) {
+                                                Log.i("CustomRequest", "Erro: " + response.toString());
+                                                hideProgressDialog();
+
+                                                dialogTitle = getResources().getString(R.string.server_error);
+                                                dialogButton = getResources().getString(R.string.back);
+                                                dialogText = getResources().getString(R.string.register_email_already_exist);
+
+                                                builder.setPositiveButton(dialogButton, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                    }
+                                                });
+                                            }
                                             //SE O SERVIDOR NÃO RETORNAR ERRO, CHAMA A TELA DE LOGIN.
                                             else {
                                                 Log.i("CustomRequest", "Sucesso: " + response.toString());

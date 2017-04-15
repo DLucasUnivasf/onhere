@@ -49,12 +49,14 @@
     <string name="required_address">Por favor, selecione um endereço.</string>
     <string name="invalid_password_or_email">Email ou senha inválida.</string>
     <string name="required_location_permission">Por favor, permita o uso da localização.</string>
-    <string name="request_error">"Erro na requisicao ao servidor"</string>string>
+    <string name="request_error">"Erro na requisição ao servidor."</string>string>
     <string name="welcome">Bem Vindo!</string>
-    <string name="invalid_code">Codido de evento invalido</string>
-    <string name="check_in_fail">Falha ao registrar no evento</string>
-    <string name="event_not_found">Evento nao encontrado</string>
-    <string name="view">Visualizar</string><string name="server_error">Encontramos algum erro nos nossos servidores. Por favor tente novamente mais tarde.</string>
+    <string name="invalid_code">Código de evento inválido.</string>
+    <string name="check_in_fail">Falha ao tentar registrar-se no evento.</string>
+    <string name="event_not_found">Evento não encontrado.</string>
+    <string name="view">Visualizar</string>
+    <string name="server_error">Encontramos algum erro em nossos servidores. Por favor tente novamente mais tarde.</string>
     <string name="version">Versão 1.0.0</string>
     <string name="repository"><a href="https://github.com/esron/onhere">onHere</a></string>
+    <string name="invalid_date">Data com formato inválido.</string>
 </resources>
