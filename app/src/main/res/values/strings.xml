@@ -27,7 +27,8 @@
     <string name="required_field">Campo obrigatório</string>
     <string name="insert_valid_email">Insira um e-mail válido</string>
     <string name="information">Informações</string>
-    <string name="check_in_sucess">Check in efetuado com sucesso! Verifique seu perfil para mais detalhes.</string>
+    <string name="check_in_sucess">Check in efetuado com sucesso!</string>
+    <string name="check_in_sucess_message">Verifique seu perfil para mais detalhes.</string>
     <string name="events">Eventos</string>
     <string name="password_not_match">As senhas diferem.</string>
     <string name="event_register_success">Visite seu perfil para mais detalhes.</string>
@@ -51,12 +52,15 @@
     <string name="required_location_permission">Por favor, permita o uso da localização.</string>
     <string name="request_error">"Erro na requisição ao servidor."</string>string>
     <string name="welcome">Bem Vindo!</string>
-    <string name="invalid_code">Código de evento inválido.</string>
-    <string name="check_in_fail">Falha ao tentar registrar-se no evento.</string>
+    <string name="invalid_code_length">Códigos de evento contém 6 caracteres.</string>
     <string name="event_not_found">Evento não encontrado.</string>
+    <string name="event_not_found_message">Não foi possivel localizar o evento, verifique o código e tente novamente</string>
     <string name="view">Visualizar</string>
     <string name="server_error">Encontramos algum erro em nossos servidores. Por favor tente novamente mais tarde.</string>
     <string name="version">Versão 1.0.0</string>
     <string name="repository"><a href="https://github.com/esron/onhere">onHere</a></string>
     <string name="invalid_date">Data com formato inválido.</string>
+    <string name ="id_error">Erro na identificação do usuario</string>
+    <string name="token_error">Faça login novamente</string>
+    <string name="check_in_error">Falha ao registrar no evento</string>
 </resources>

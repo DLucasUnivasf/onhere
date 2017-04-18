@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,10 +21,19 @@ public class MainActivity extends AppCompatActivity {
 
         Button checkInButton = (Button) findViewById(R.id.mainCheckInButton);
         FloatingActionButton newEventButton = (FloatingActionButton) findViewById(R.id.newEventButton);
-        EditText descriptionText = (EditText) findViewById(R.id.mainDescription);
+        WebView descriptionText = (WebView) findViewById(R.id.mainDescription);
 
-        descriptionText.setText("   OnHere gerencia seus eventos! \n\n"+
-                "Descrição: blablablablablablablablalblalblalbla, Texto estatico");
+        String text = "<html><body>"
+                         + "<p align=\"justify\">"
+                         + "No <b>OnHere</b> voce pode controlar seus eventos!</br></br>"
+                         + "Clique no botao <strong>CHECK IN</strong> para registrar "
+                         + "sua presenca em algum evento ou crie seu proprio evento</br></br>"
+                         + "Voce tambem pode consultar seus eventos ou eventos onde registrou presenca"
+                         +  "</br></br> <strong><i>Texto Exemplo</i></strong>"
+                         + "</p> "
+                         + "</body></html>";
+                      descriptionText.loadData(text, "text/html", "ISO-8859-1");
+
 
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override

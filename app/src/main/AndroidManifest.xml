@@ -39,11 +39,14 @@
         <activity
             android:name=".EventRegisterActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".CheckInActivity" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CheckInActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".EventActivity" />
-        <activity android:name=".EventInfoActivity" />
+        <activity android:name=".EventInfoActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".PlacePickerActivity" />
         <activity android:name=".AboutActivty"></activity>
     </application>

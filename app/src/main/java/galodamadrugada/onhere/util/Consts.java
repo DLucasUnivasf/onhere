@@ -13,6 +13,7 @@ public class Consts {
 
     // Strings constantes do app
     public static final String PREFS_FILE_NAME = "mPrefsFile";
+    public static final int EVENT_CODE_LENGHT = 6;
 
     // Códigos de erro
     public static final String URL_NOT_FOUND               = "404";
