@@ -19,13 +19,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     private List<Event> eventList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, id, description;
+        public TextView name, id;
 
         public MyViewHolder(View view) {
             super(view);
             name        = (TextView) view.findViewById(R.id.name);
             id          = (TextView) view.findViewById(R.id.id);
-            description = (TextView) view.findViewById(R.id.description);
         }
     }
 
@@ -45,7 +44,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         Event event = eventList.get(position);
         holder.name.setText(event.getName());
         holder.id.setText(event.getId());
-        holder.description.setText(event.getDescription());
     }
 
     @Override

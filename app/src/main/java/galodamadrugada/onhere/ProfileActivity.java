@@ -72,8 +72,7 @@ public class ProfileActivity  extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
 
                 intent.putExtra("name", event.getName());
-                intent.putExtra("id", event.getId());
-                intent.putExtra("description", event.getDescription());
+                intent.putExtra("id",   event.getId());
 
                 startActivity(intent);
             }
@@ -113,7 +112,6 @@ public class ProfileActivity  extends AppCompatActivity {
                             try {
                                 event.setName(jsonArray.getJSONObject(i).getString("nome"));
                                 event.setId(jsonArray.getJSONObject(i).getString("chave"));
-                                event.setDescription(jsonArray.getJSONObject(i).getString("descricao"));
 
                                 events.add(event);
 
@@ -151,7 +149,6 @@ public class ProfileActivity  extends AppCompatActivity {
                             try {
                                 event.setName(jsonArray.getJSONObject(i).getString("nome"));
                                 event.setId(jsonArray.getJSONObject(i).getString("chave"));
-                                event.setDescription(jsonArray.getJSONObject(i).getString("descricao"));
 
                                 events.add(event);
 
