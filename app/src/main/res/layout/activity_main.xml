@@ -16,8 +16,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="32dp">
+        app:cardElevation="0dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_height="match_parent"
@@ -51,10 +50,8 @@
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:text="CHECK IN"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:background="@drawable/check_in_button"
+            android:textSize="18sp"
+
             android:elegantTextHeight="true"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"

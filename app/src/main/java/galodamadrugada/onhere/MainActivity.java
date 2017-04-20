@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton newEventButton = (FloatingActionButton) findViewById(R.id.newEventButton);
         WebView descriptionText = (WebView) findViewById(R.id.mainDescription);
 
+        /*Aparentemente textView não justifica texto, por isso o webView ... :-P */
+
         String text = "<html><body>"
                          + "<p align=\"justify\">"
                          + "No <b>OnHere</b> voce pode controlar seus eventos!</br></br>"
