@@ -26,12 +26,12 @@ public class MainActivity extends AppCompatActivity {
         /*Aparentemente textView não justifica texto, por isso o webView ... :-P */
 
         String text = "<html><body>"
+                         + "<p align=\"center\">"
+                         + "Com <b>OnHere</b> voc&ecirc; controla seus eventos!</br>"
+                         + "</p>"
                          + "<p align=\"justify\">"
-                         + "No <b>OnHere</b> voce pode controlar seus eventos!</br></br>"
-                         + "Clique no botao <strong>CHECK IN</strong> para registrar "
-                         + "sua presenca em algum evento ou crie seu proprio evento</br></br>"
-                         + "Voce tambem pode consultar seus eventos ou eventos onde registrou presenca"
-                         +  "</br></br> <strong><i>Texto Exemplo</i></strong>"
+                         + "Clique no bot&atilde;o <strong>CHECK IN</strong> para registrar "
+                         + "sua presen&ccedil;a em algum evento.</br>"
                          + "</p> "
                          + "</body></html>";
                       descriptionText.loadData(text, "text/html", "ISO-8859-1");
