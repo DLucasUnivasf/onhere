@@ -5,6 +5,7 @@
     android:layout_height="wrap_content" >
 
     <EditText
+
         android:id="@+id/textCheckInCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
