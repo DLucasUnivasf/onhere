@@ -54,7 +54,7 @@
     <string name="welcome">Bem Vindo!</string>
     <string name="invalid_code_length">Códigos de evento contém 6 caracteres.</string>
     <string name="event_not_found">Evento não encontrado.</string>
-    <string name="event_not_found_message">Não foi possiível localizar o evento, verifique o código e tente novamente.</string>
+    <string name="event_not_found_message">Não foi possível localizar o evento, verifique o código e tente novamente</string>
     <string name="view">Visualizar</string>
     <string name="server_error">Encontramos algum erro em nossos servidores. Por favor tente novamente mais tarde.</string>
     <string name="version">Versão 1.0.0</string>
