@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:hint="@string/event_code"
         android:inputType="text"
-        android:digits="0123456789qwertyuiopasdfghjklçzxcvbnmQWERTYUIOPASDFGHJKLÇZXCVBNM"
         android:maxLength="6"
         android:layout_marginTop="8dp"
         android:layout_centerInParent="true"/>
