@@ -30,6 +30,8 @@ public class Consts {
     public static final String EVENT_ENTER_ERROR           = "415";
     public static final String EVENT_OWNER_SEARCHING_ERROR = "416";
     public static final String EVENT_ENTER_SUCCESS         = "417";
+    public static final String EVENT_MAX_DISTANCE_ERROR    = "419";
+    public static final String EVENT_TIME_TOLERANCE_ERROR  = "421";
     public static final String REGISTER_ERROR              = "418";
     public static final String LOGIN_SUCCESS               = "666";
 }

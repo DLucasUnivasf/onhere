@@ -126,6 +126,29 @@ public class CheckInActivity extends AppCompatActivity {
                                                         });
                                                         break;
 
+                                                    case Consts.EVENT_TIME_TOLERANCE_ERROR:
+                                                        progressDialog.hide();
+                                                        dialogTitle = getResources().getString(R.string.event_time_tolerance_error);
+                                                        dialogMessage = getResources().getString(R.string.event_time_tolerance);
+                                                        builder.setPositiveButton(dialogButtonText, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                            }
+                                                        });
+                                                        break;
+
+                                                    case Consts.EVENT_MAX_DISTANCE_ERROR:
+                                                        progressDialog.hide();
+                                                        dialogTitle = getResources().getString(R.string.event_max_distance_error);
+                                                        dialogMessage = getResources().getString(R.string.event_max_distance);
+                                                        builder.setPositiveButton(dialogButtonText, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                            }
+                                                        });
+                                                        break;
+
+
                                                     case Consts.EVENT_ENTER_SUCCESS:
                                                         progressDialog.hide();
                                                         dialogTitle = getResources().getString(R.string.check_in_sucess);
