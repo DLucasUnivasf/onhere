@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 //title.setTextColor(Color.WHITE);
                 //title.setTextSize(20);
 
-                builder.setView(view)
+                builder.setView(view).setTitle("CHECKIN")
                             .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
