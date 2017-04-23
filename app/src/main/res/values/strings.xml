@@ -27,7 +27,7 @@
     <string name="required_field">Campo obrigatório</string>
     <string name="insert_valid_email">Insira um e-mail válido</string>
     <string name="information">Informações</string>
-    <string name="check_in_sucess">Check in efetuado com sucesso!</string>
+    <string name="check_in_sucess">Sucesso!</string>
     <string name="check_in_sucess_message">Verifique seu perfil para mais detalhes.</string>
     <string name="events">Eventos</string>
     <string name="password_not_match">As senhas diferem.</string>
@@ -54,7 +54,7 @@
     <string name="welcome">Bem Vindo!</string>
     <string name="invalid_code_length">Códigos de evento contém 6 caracteres.</string>
     <string name="event_not_found">Evento não encontrado.</string>
-    <string name="event_not_found_message">Não foi possível localizar o evento, verifique o código e tente novamente</string>
+    <string name="event_not_found_message">Verifique o código e tente novamente.</string>
     <string name="view">Visualizar</string>
     <string name="server_error">Encontramos algum erro em nossos servidores. Por favor tente novamente mais tarde.</string>
     <string name="version">Versão 1.0.0</string>
