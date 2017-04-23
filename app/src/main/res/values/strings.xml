@@ -48,7 +48,7 @@
     <string name="network_not_conected">Não foi encontrada conexão com a internet.</string>
     <string name="address">Endereço</string>
     <string name="required_address">Por favor, selecione um endereço.</string>
-    <string name="invalid_password_or_email">Email ou senha inválida.</string>
+    <string name="invalid_password_or_email">E-mail ou senha inválida.</string>
     <string name="required_location_permission">Por favor, permita o uso da localização.</string>
     <string name="request_error">"Erro na requisição ao servidor."</string>string>
     <string name="welcome">Bem Vindo!</string>
@@ -56,7 +56,7 @@
     <string name="event_not_found">Evento não encontrado.</string>
     <string name="event_not_found_message">Verifique o código e tente novamente.</string>
     <string name="view">Visualizar</string>
-    <string name="server_error">Encontramos algum erro em nossos servidores. Por favor tente novamente mais tarde.</string>
+    <string name="server_error">Encontramos algum erro em nossos servidores. Por favor, tente novamente mais tarde.</string>
     <string name="version">Versão 1.0.0</string>
     <string name="repository"><a href="https://github.com/esron/onhere">onHere</a></string>
     <string name="invalid_date">Data com formato inválido.</string>
