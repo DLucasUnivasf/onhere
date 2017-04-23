@@ -83,15 +83,15 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.setCancelable(false);
 
 
-                TextView title = new TextView(MainActivity.this);
-                title.setText("CHECK IN no evento");
-                title.setBackgroundColor(Color.parseColor("#3f51b5")); /*Primary Color*/
-                title.setPadding(10, 10, 10, 10);
-                title.setGravity(Gravity.CENTER);
-                title.setTextColor(Color.WHITE);
-                title.setTextSize(20);
+                //TextView title = new TextView(MainActivity.this);
+                //title.setText("CHECK IN");
+                //title.setBackgroundColor(Color.parseColor("#3f51b5")); /*Primary Color*/
+                //title.setPadding(10, 10, 10, 10);
+                //title.setGravity(Gravity.CENTER);
+                //title.setTextColor(Color.WHITE);
+                //title.setTextSize(20);
 
-                builder.setView(view).setCustomTitle(title)
+                builder.setView(view)
                             .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 

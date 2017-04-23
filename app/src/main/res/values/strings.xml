@@ -54,17 +54,17 @@
     <string name="welcome">Bem Vindo!</string>
     <string name="invalid_code_length">Códigos de evento contém 6 caracteres.</string>
     <string name="event_not_found">Evento não encontrado.</string>
-    <string name="event_not_found_message">Não foi possivel localizar o evento, verifique o código e tente novamente</string>
+    <string name="event_not_found_message">Não foi possiível localizar o evento, verifique o código e tente novamente.</string>
     <string name="view">Visualizar</string>
     <string name="server_error">Encontramos algum erro em nossos servidores. Por favor tente novamente mais tarde.</string>
     <string name="version">Versão 1.0.0</string>
     <string name="repository"><a href="https://github.com/esron/onhere">onHere</a></string>
     <string name="invalid_date">Data com formato inválido.</string>
-    <string name ="id_error">Erro na identificação do usuario</string>
-    <string name="token_error">Faça login novamente</string>
-    <string name="check_in_error">Falha ao registrar no evento</string>
-    <string name="event_max_distance_error">Erro! Localização invalida.</string>
-    <string name="event_max_distance">E preciso estar no local do evento para registrar sua presença</string>
-    <string name="event_time_tolerance_error">Erro! Tempo maximo de tolerância excedido</string>
-    <string name="event_time_tolerance">Não é possivel registrar no evento,limite de atraso excedido</string>>
+    <string name ="id_error">Erro na identificação do usuário.</string>
+    <string name="token_error">Por favor, faça login novamente.</string>
+    <string name="check_in_error">Falha ao registrar-se no evento.</string>
+    <string name="event_max_distance_error">Erro! Localização inválida.</string>
+    <string name="event_max_distance">É preciso estar no local do evento para registrar sua presença.</string>
+    <string name="event_time_tolerance_error">Erro! Tolerância excedida.</string>
+    <string name="event_time_tolerance">Não foi possível registrar-se no evento, limite de atraso excedido.</string>>
 </resources>
