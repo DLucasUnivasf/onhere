@@ -66,5 +66,7 @@
     <string name="event_max_distance_error">Erro! Localização inválida.</string>
     <string name="event_max_distance">Sua localização difere do local do evento.</string>
     <string name="event_time_tolerance_error">Erro! Tolerância excedida.</string>
-    <string name="event_time_tolerance">Não foi possível registrar-se no evento, limite de atraso excedido.</string>>
+    <string name="event_time_tolerance">Não foi possível registrar-se no evento, limite de atraso excedido.</string>
+    <string name="checkin_localization_error">Erro! Falha na localização</string>
+    <string name="checkin_localization">Não foi possivel determinar sua localização. Verifique se o GPS esta ativo e tente novamente!</string>>
 </resources>
