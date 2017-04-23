@@ -64,7 +64,7 @@
     <string name="token_error">Por favor, faça login novamente.</string>
     <string name="check_in_error">Falha ao registrar-se no evento.</string>
     <string name="event_max_distance_error">Erro! Localização inválida.</string>
-    <string name="event_max_distance">É preciso estar no local do evento para registrar sua presença.</string>
+    <string name="event_max_distance">Sua localização difere do local do evento.</string>
     <string name="event_time_tolerance_error">Erro! Tolerância excedida.</string>
     <string name="event_time_tolerance">Não foi possível registrar-se no evento, limite de atraso excedido.</string>>
 </resources>
