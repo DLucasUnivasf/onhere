@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -58,10 +60,12 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
     private EditText editTextEventName, editTextDelay, editTextDescription;
     private TextView textViewHour, textViewDate, textViewDateEnd, textViewHourEnd, textViewAddress;
     private Button buttonHour, buttonDate, buttonRegisterEvent, buttonEndHour, buttonEndDate, buttonAddress;
+    private Switch switchDelay;
     static final int DATE_DIALOG_ID = 0;
     static final int HOUR_DIALOG_ID = 1;
     private static final int REQUEST_CODE = 1;
     private Bundle bundle;
+    private Boolean check;
 
     String dateStart, hourStart, dateEnd, hourEnd, dialogTitle, dialogText, dialogButton;
 
@@ -82,8 +86,35 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
 
         //EXIBIÇÃO DOS DADO DO EVENTO
         editTextEventName = (EditText) findViewById(R.id.editTextEventName);
+        switchDelay = (Switch) findViewById(R.id.switchDelay);
         editTextDelay = (EditText) findViewById(R.id.editTextDelay);
         editTextDescription = (EditText) findViewById(R.id.editTextDescription);
+
+        //CONFIGURAÇÃO DO SWITCH
+        //set the switch to OFF
+        switchDelay.setChecked(false);
+        check = false;
+
+        //attach a listener to check for changes in state
+        switchDelay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    editTextDelay.setEnabled(false);
+                    editTextDelay.setClickable(false);
+                    check = true;
+                } else {
+                    editTextDelay.setEnabled(true);
+                    editTextDelay.setClickable(true);
+                    check = false;
+                }
+
+            }
+        });
+
+
+
 
         //DATE PICKER'S
         buttonDate = (Button) findViewById(R.id.buttonDate);
@@ -207,9 +238,11 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                     editTextEventName.setError(getResources().getString(R.string.required_field));
                 }
                 //VERIFICA SE O ATRASO MÁXIMO DO EVENTO FOI PREENCHIDO
-                else if (editTextDelay.getText().toString().equals("")) {
-                    editTextDelay.requestFocus();
-                    editTextDelay.setError(getResources().getString(R.string.required_field));
+                else if (!check) {
+                    if (editTextDelay.getText().toString().equals("")) {
+                        editTextDelay.requestFocus();
+                        editTextDelay.setError(getResources().getString(R.string.required_field));
+                    }
                 }
                 //VERIFICA SE A DESCRIÇÃO DO EVENTO FOI PREENCHIDA
                 else if (editTextDescription.getText().toString().equals("")) {
@@ -252,10 +285,17 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                         params.put("desc", editTextDescription.getText().toString());
                         params.put("nome", editTextEventName.getText().toString());
                         params.put("dtin", dateStart + hourStart);
-                        params.put("tolerancia", editTextDelay.getText().toString());
                         params.put("dtfim", dateEnd + hourEnd);
                         params.put("latitude", bundle.getString("latitude"));
                         params.put("longitude", bundle.getString("longitude"));
+
+
+                        if(check) {
+                            params.put("tolerancia", "0");
+                            Log.i("LOG!", "aqui");
+                        }else {
+                            params.put("tolerancia", editTextDelay.getText().toString());
+                        }
 
                         headers.put("x-access-token", preferences.getString("token", ""));
 
