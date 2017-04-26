@@ -1,6 +1,6 @@
 package galodamadrugada.onhere.domain;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
 
 /**
  * Created by UNIVASF on 30/03/2017.
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Event {
 
     private String name, id, description, initDate, endDate, tolerance, owner;
-    private ArrayList<String> participants = new ArrayList<>();
+    private JSONArray participants;
 
     public Event(){}
 
@@ -67,11 +67,11 @@ public class Event {
         this.owner = owner;
     }
 
-    public ArrayList<String> getParticipants() {
+    public JSONArray getParticipants() {
         return participants;
     }
 
-    public void setParticipants(ArrayList<String> participants) {
+    public void setParticipants(JSONArray participants) {
         this.participants = participants;
     }
 }

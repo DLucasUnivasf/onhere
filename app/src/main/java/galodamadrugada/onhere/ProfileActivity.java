@@ -1,15 +1,20 @@
 package galodamadrugada.onhere;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,16 +36,15 @@ import galodamadrugada.onhere.domain.Event;
 import galodamadrugada.onhere.network.CustomRequest;
 import galodamadrugada.onhere.network.NetworkConnection;
 import galodamadrugada.onhere.util.Consts;
-import galodamadrugada.onhere.util.RecyclerTouchListener;
+
 
 /**
  * Created by UNIVASF on 14/03/2017.
  */
 
-public class ProfileActivity  extends AppCompatActivity {
+public class ProfileActivity  extends AppCompatActivity implements EventAdapter.EventAdapterListener {
     TextView        textViewInformation;
     TextView        textViewName;
-    TextView        textViewEmail;
     ImageButton     imageButtonEditProfile;
     RecyclerView    recyclerView;
     EventAdapter    eventAdapter;
@@ -53,35 +57,19 @@ public class ProfileActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+
         textViewInformation     = (TextView)     findViewById(R.id.textViewInformation);
         textViewName            = (TextView)     findViewById(R.id.textViewName);
-        textViewEmail           = (TextView)     findViewById(R.id.textViewEmail);
         imageButtonEditProfile  = (ImageButton)  findViewById(R.id.imageButtonEditProfile);
         recyclerView            = (RecyclerView) findViewById(R.id.recyclerView);
-        eventAdapter            = new EventAdapter(events);
+        eventAdapter            = new EventAdapter(this, events, this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Event event = events.get(position);
-                Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
-
-                intent.putExtra("name", event.getName());
-                intent.putExtra("id",   event.getId());
-
-                startActivity(intent);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
 
         prepareEventData();
     }
@@ -112,7 +100,7 @@ public class ProfileActivity  extends AppCompatActivity {
                             try {
                                 event.setName(jsonArray.getJSONObject(i).getString("nome"));
                                 event.setId(jsonArray.getJSONObject(i).getString("chave"));
-
+                                event.setParticipants(jsonArray.getJSONObject(i).getJSONArray("participantes"));
                                 events.add(event);
 
                                 eventAdapter.notifyDataSetChanged();
@@ -149,7 +137,7 @@ public class ProfileActivity  extends AppCompatActivity {
                             try {
                                 event.setName(jsonArray.getJSONObject(i).getString("nome"));
                                 event.setId(jsonArray.getJSONObject(i).getString("chave"));
-
+                                event.setParticipants(jsonArray.getJSONObject(i).getJSONArray("participantes"));
                                 events.add(event);
 
                                 eventAdapter.notifyDataSetChanged();
@@ -166,5 +154,110 @@ public class ProfileActivity  extends AppCompatActivity {
         });
         NetworkConnection.getInstance().addToRequestQueue(requestMyEvents);
         NetworkConnection.getInstance().addToRequestQueue(requestOthersEvents);
+    }
+
+    @Override
+    public void onEventAdapterRowClicked(int position) {
+
+//        HashMap<String, String> headers = new HashMap<>();
+//        SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
+//        headers.put("x-access-token", preferences.getString("token", ""));
+//
+//        CustomRequest requestMyEvents = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.LIST_MY_EVENTS,
+//                null, headers,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        JSONArray jsonArray = new JSONArray();
+//
+//                        Log.i("CustomRequest", "response: " + response.toString());
+//
+//                        try {
+//                            jsonArray = response.getJSONArray("participantes");
+//                            Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
+//                            intent.putExtra("jsonArray", jsonArray.toString());
+//                            startActivity(intent);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//
+//        NetworkConnection.getInstance().addToRequestQueue(requestMyEvents);
+
+
+        Event event = events.get(position);
+        Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
+
+        intent.putExtra("name", event.getName());
+        intent.putExtra("id",   event.getId());
+        intent.putExtra("participants", event.getParticipants().toString());
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onEventDelete(final int position){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+
+        builder.setMessage(R.string.confirmation_delete_event)
+               .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        HashMap<String, String> headers = new HashMap<>();
+                        SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
+                        headers.put("x-access-token", preferences.getString("token", ""));
+
+                        CustomRequest deleteMyEvent = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.DELETE_EVENT + "?chave=" + events.get(position).getId(),
+                                null, headers,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+
+                                        Log.i("CustomRequest", "response: " + response.toString());
+
+                                        try {
+                                            if (response.getString("status").equals("423")){
+                                                events.remove(position);
+
+                                                Context context = getApplicationContext();
+                                                CharSequence text = "Evento deletado com sucesso!";
+                                                int duration = Toast.LENGTH_LONG;
+
+                                                Toast toast = Toast.makeText(context, text, duration);
+                                                toast.show();
+                                                Log.i("onEventDelete", "toast");
+
+                                                eventAdapter.notifyDataSetChanged();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                        NetworkConnection.getInstance().addToRequestQueue(deleteMyEvent);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 }

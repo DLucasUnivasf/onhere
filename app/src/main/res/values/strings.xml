@@ -69,4 +69,6 @@
     <string name="event_time_tolerance">Não foi possível registrar-se no evento, limite de atraso excedido.</string>
     <string name="checkin_localization_error">Erro! Falha na localização</string>
     <string name="checkin_localization">Não foi possivel determinar sua localização. Verifique se o GPS esta ativo e tente novamente!</string>>
+    <string name="confirmation_delete_event">Gostaria realmente de deletar este evento?</string>
+    <string name="delete">Deletar</string>
 </resources>

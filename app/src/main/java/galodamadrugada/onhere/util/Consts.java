@@ -10,6 +10,7 @@ public class Consts {
     public static final String LIST_EVENTS    = "api/evento/lista";
     public static final String LIST_MY_EVENTS = "api/evento/mine";
     public static final String CHECK_TOKEN    = "api/token/valida";
+    public static final String DELETE_EVENT   = "api/evento/delete";
 
     // Strings constantes do app
     public static final String PREFS_FILE_NAME = "mPrefsFile";
