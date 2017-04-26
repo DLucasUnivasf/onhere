@@ -94,16 +94,18 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
                             e.printStackTrace();
                         }
 
+
                         for(int i = 0; i < jsonArray.length(); i++) {
                             Event event = new Event();
-
                             try {
-                                event.setName(jsonArray.getJSONObject(i).getString("nome"));
-                                event.setId(jsonArray.getJSONObject(i).getString("chave"));
-                                event.setParticipants(jsonArray.getJSONObject(i).getJSONArray("participantes"));
-                                events.add(event);
+                                if(jsonArray.getJSONObject(i) != null) {
+                                    event.setName(jsonArray.getJSONObject(i).getString("nome"));
+                                    event.setId(jsonArray.getJSONObject(i).getString("chave"));
+                                    event.setParticipants((jsonArray.getJSONObject(i).getJSONArray("participantes") == null) ? new JSONArray() : jsonArray.getJSONObject(i).getJSONArray("participantes"));
+                                    events.add(event);
 
-                                eventAdapter.notifyDataSetChanged();
+                                    eventAdapter.notifyDataSetChanged();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -135,12 +137,14 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
                             Event event = new Event();
 
                             try {
-                                event.setName(jsonArray.getJSONObject(i).getString("nome"));
-                                event.setId(jsonArray.getJSONObject(i).getString("chave"));
-                                event.setParticipants(jsonArray.getJSONObject(i).getJSONArray("participantes"));
-                                events.add(event);
+                                if(jsonArray.getJSONObject(i) != null) {
+                                    event.setName(jsonArray.getJSONObject(i).getString("nome"));
+                                    event.setId(jsonArray.getJSONObject(i).getString("chave"));
+                                    event.setParticipants((jsonArray.getJSONObject(i).getJSONArray("participantes") == null) ? new JSONArray() : jsonArray.getJSONObject(i).getJSONArray("participantes"));
+                                    events.add(event);
 
-                                eventAdapter.notifyDataSetChanged();
+                                    eventAdapter.notifyDataSetChanged();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -158,46 +162,14 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
 
     @Override
     public void onEventAdapterRowClicked(int position) {
-
-//        HashMap<String, String> headers = new HashMap<>();
-//        SharedPreferences preferences = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
-//        headers.put("x-access-token", preferences.getString("token", ""));
-//
-//        CustomRequest requestMyEvents = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.LIST_MY_EVENTS,
-//                null, headers,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        JSONArray jsonArray = new JSONArray();
-//
-//                        Log.i("CustomRequest", "response: " + response.toString());
-//
-//                        try {
-//                            jsonArray = response.getJSONArray("participantes");
-//                            Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
-//                            intent.putExtra("jsonArray", jsonArray.toString());
-//                            startActivity(intent);
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//
-//        NetworkConnection.getInstance().addToRequestQueue(requestMyEvents);
-
-
         Event event = events.get(position);
         Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
 
         intent.putExtra("name", event.getName());
         intent.putExtra("id",   event.getId());
         intent.putExtra("participants", event.getParticipants().toString());
+
+        Log.i("ProfileActivity", "Enviando: " + event.getParticipants().toString());
 
         startActivity(intent);
     }
