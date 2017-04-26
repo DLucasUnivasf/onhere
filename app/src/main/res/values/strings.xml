@@ -71,6 +71,5 @@
     <string name="checkin_localization">Não foi possivel determinar sua localização. Verifique se o GPS esta ativo e tente novamente!</string>>
     <string name="confirmation_delete_event">Gostaria realmente de deletar este evento?</string>
     <string name="delete">Deletar</string>
-    <string name="checkin_localization">Não foi possivel determinar sua localização. Verifique se o GPS esta ativo e tente novamente!</string>
     <string name="delay_limit_over">A quantidade de minutos do atraso permitido é superior à duração do evento.</string>
 </resources>
