@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -103,10 +104,12 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 if (isChecked) {
                     editTextDelay.setEnabled(false);
                     editTextDelay.setClickable(false);
+                    editTextDelay.setHint("");
                     check = true;
                 } else {
                     editTextDelay.setEnabled(true);
                     editTextDelay.setClickable(true);
+                    editTextDelay.setHint(getResources().getString(R.string.delay_tolerance));
                     check = false;
                 }
 
@@ -202,9 +205,11 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 //DEFINE OS FORMATOS DE DATA E HORA PARA FIM DE COMPARAÇÃO
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
                 //INICIALIZA AS VARIÁVEIS QUE SERÃO COMPARADAS PARA FIM DE CONSISTÊNCIA DE DADOS
-                Date inTime = null, outTime = null, inDate = null, outDate = null;
+                Date inTime = null, outTime = null, inDate = null, outDate = null, tolTime1 = null, tolTime2= null;
+
 
                 //COLOCA OS DADOS ATUAIS NAS VARIÁVEIS ACIMA
                 try {
@@ -227,45 +232,48 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                try {
+                    tolTime1 = sdf3.parse(textViewDate.getText().toString() + " " + textViewHour.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    tolTime2 = sdf3.parse(textViewDateEnd.getText().toString() + " " + textViewHourEnd.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 assert inTime != null;
                 assert outTime != null;
                 assert outDate != null;
                 assert inDate != null;
+                assert tolTime1 != null;
+                assert tolTime2 != null;
+
+                long diff = tolTime2.getTime() - tolTime1.getTime();
+                int diffmin = (int) (diff / (60 * 1000));
 
                 //VERIFICA SE O NOME DO EVENTO FOI PREENCHIDO
                 if (editTextEventName.getText().toString().equals("")) {
                     editTextEventName.requestFocus();
                     editTextEventName.setError(getResources().getString(R.string.required_field));
                 }
-                //VERIFICA SE O ATRASO MÁXIMO DO EVENTO FOI PREENCHIDO
-                else if (!check) {
-                    if (editTextDelay.getText().toString().equals("")) {
-                        editTextDelay.requestFocus();
-                        editTextDelay.setError(getResources().getString(R.string.required_field));
-                    }
-                }
-                //VERIFICA SE A DESCRIÇÃO DO EVENTO FOI PREENCHIDA
-                else if (editTextDescription.getText().toString().equals("")) {
-                    editTextDescription.requestFocus();
-                    editTextDescription.setError(getResources().getString(R.string.required_field));
-                }
                 //VERIFICA SE A DATA INICIAL DO EVENTO É ANTERIOR OU IGUAL À DATA FINAL
                 else if (inDate.after(outDate)) {
-                        Context context = getApplicationContext();
-                        CharSequence text = getResources().getString(R.string.difference_date);
-                        int duration = Toast.LENGTH_SHORT;
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.difference_date);
+                    int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 //VERIFICA SE A HORA INICIAL DO EVENTO É ANTERIOR À HORA FINAL
                 else if ((outDate.equals(inDate)) && (inTime.compareTo(outTime) != -1)) {
-                        Context context = getApplicationContext();
-                        CharSequence text = getResources().getString(R.string.difference_hour);
-                        int duration = Toast.LENGTH_SHORT;
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.difference_hour);
+                    int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 //VERIFICA SE O ENDEREÇO DO EVENTO FOI PREENCHIDO
                 else if (textViewAddress.getText().toString().equals("")) {
@@ -278,6 +286,26 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
+                //VERIFICA SE O ATRASO MÁXIMO DO EVENTO FOI PREENCHIDO CORRETAMENTE
+                else if (!check && editTextDelay.getText().toString().equals("")) {
+                    editTextDelay.requestFocus();
+                    editTextDelay.setError(getResources().getString(R.string.required_field));
+                }
+                else if(!check && (Integer.parseInt(editTextDelay.getText().toString()) > diffmin)) {
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.delay_limit_over);
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
+                //VERIFICA SE A DESCRIÇÃO DO EVENTO FOI PREENCHIDA
+                else if (editTextDescription.getText().toString().equals("")) {
+                    editTextDescription.requestFocus();
+                    editTextDescription.setError(getResources().getString(R.string.required_field));
+                }
+
                 //INICIA A REQUISIÇÃO AO SERVIDOR SE TODOS OS TESTES ACIMA FOREM SATISFEITOS
                 else{
                     if (NetworkConnection.getInstance().isOnline()) {
