@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,10 +61,12 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
     private EditText editTextEventName, editTextDelay, editTextDescription;
     private TextView textViewHour, textViewDate, textViewDateEnd, textViewHourEnd, textViewAddress;
     private Button buttonHour, buttonDate, buttonRegisterEvent, buttonEndHour, buttonEndDate, buttonAddress;
+    private Switch switchDelay;
     static final int DATE_DIALOG_ID = 0;
     static final int HOUR_DIALOG_ID = 1;
     private static final int REQUEST_CODE = 1;
     private Bundle bundle;
+    private Boolean check;
 
     String dateStart, hourStart, dateEnd, hourEnd, dialogTitle, dialogText, dialogButton;
 
@@ -82,8 +87,37 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
 
         //EXIBIÇÃO DOS DADO DO EVENTO
         editTextEventName = (EditText) findViewById(R.id.editTextEventName);
+        switchDelay = (Switch) findViewById(R.id.switchDelay);
         editTextDelay = (EditText) findViewById(R.id.editTextDelay);
         editTextDescription = (EditText) findViewById(R.id.editTextDescription);
+
+        //CONFIGURAÇÃO DO SWITCH
+        //set the switch to OFF
+        switchDelay.setChecked(false);
+        check = false;
+
+        //attach a listener to check for changes in state
+        switchDelay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    editTextDelay.setEnabled(false);
+                    editTextDelay.setClickable(false);
+                    editTextDelay.setHint("");
+                    check = true;
+                } else {
+                    editTextDelay.setEnabled(true);
+                    editTextDelay.setClickable(true);
+                    editTextDelay.setHint(getResources().getString(R.string.delay_tolerance));
+                    check = false;
+                }
+
+            }
+        });
+
+
+
 
         //DATE PICKER'S
         buttonDate = (Button) findViewById(R.id.buttonDate);
@@ -171,9 +205,11 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 //DEFINE OS FORMATOS DE DATA E HORA PARA FIM DE COMPARAÇÃO
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf3 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
                 //INICIALIZA AS VARIÁVEIS QUE SERÃO COMPARADAS PARA FIM DE CONSISTÊNCIA DE DADOS
-                Date inTime = null, outTime = null, inDate = null, outDate = null;
+                Date inTime = null, outTime = null, inDate = null, outDate = null, tolTime1 = null, tolTime2= null;
+
 
                 //COLOCA OS DADOS ATUAIS NAS VARIÁVEIS ACIMA
                 try {
@@ -196,43 +232,48 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                try {
+                    tolTime1 = sdf3.parse(textViewDate.getText().toString() + " " + textViewHour.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    tolTime2 = sdf3.parse(textViewDateEnd.getText().toString() + " " + textViewHourEnd.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 assert inTime != null;
                 assert outTime != null;
                 assert outDate != null;
                 assert inDate != null;
+                assert tolTime1 != null;
+                assert tolTime2 != null;
+
+                long diff = tolTime2.getTime() - tolTime1.getTime();
+                int diffmin = (int) (diff / (60 * 1000));
 
                 //VERIFICA SE O NOME DO EVENTO FOI PREENCHIDO
                 if (editTextEventName.getText().toString().equals("")) {
                     editTextEventName.requestFocus();
                     editTextEventName.setError(getResources().getString(R.string.required_field));
                 }
-                //VERIFICA SE O ATRASO MÁXIMO DO EVENTO FOI PREENCHIDO
-                else if (editTextDelay.getText().toString().equals("")) {
-                    editTextDelay.requestFocus();
-                    editTextDelay.setError(getResources().getString(R.string.required_field));
-                }
-                //VERIFICA SE A DESCRIÇÃO DO EVENTO FOI PREENCHIDA
-                else if (editTextDescription.getText().toString().equals("")) {
-                    editTextDescription.requestFocus();
-                    editTextDescription.setError(getResources().getString(R.string.required_field));
-                }
                 //VERIFICA SE A DATA INICIAL DO EVENTO É ANTERIOR OU IGUAL À DATA FINAL
                 else if (inDate.after(outDate)) {
-                        Context context = getApplicationContext();
-                        CharSequence text = getResources().getString(R.string.difference_date);
-                        int duration = Toast.LENGTH_SHORT;
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.difference_date);
+                    int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 //VERIFICA SE A HORA INICIAL DO EVENTO É ANTERIOR À HORA FINAL
                 else if ((outDate.equals(inDate)) && (inTime.compareTo(outTime) != -1)) {
-                        Context context = getApplicationContext();
-                        CharSequence text = getResources().getString(R.string.difference_hour);
-                        int duration = Toast.LENGTH_SHORT;
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.difference_hour);
+                    int duration = Toast.LENGTH_SHORT;
 
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 //VERIFICA SE O ENDEREÇO DO EVENTO FOI PREENCHIDO
                 else if (textViewAddress.getText().toString().equals("")) {
@@ -245,6 +286,26 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
+                //VERIFICA SE O ATRASO MÁXIMO DO EVENTO FOI PREENCHIDO CORRETAMENTE
+                else if (!check && editTextDelay.getText().toString().equals("")) {
+                    editTextDelay.requestFocus();
+                    editTextDelay.setError(getResources().getString(R.string.required_field));
+                }
+                else if(!check && (Integer.parseInt(editTextDelay.getText().toString()) > diffmin)) {
+                    Context context = getApplicationContext();
+                    CharSequence text = getResources().getString(R.string.delay_limit_over);
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
+                //VERIFICA SE A DESCRIÇÃO DO EVENTO FOI PREENCHIDA
+                else if (editTextDescription.getText().toString().equals("")) {
+                    editTextDescription.requestFocus();
+                    editTextDescription.setError(getResources().getString(R.string.required_field));
+                }
+
                 //INICIA A REQUISIÇÃO AO SERVIDOR SE TODOS OS TESTES ACIMA FOREM SATISFEITOS
                 else{
                     if (NetworkConnection.getInstance().isOnline()) {
@@ -252,10 +313,17 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
                         params.put("desc", editTextDescription.getText().toString());
                         params.put("nome", editTextEventName.getText().toString());
                         params.put("dtin", dateStart + hourStart);
-                        params.put("tolerancia", editTextDelay.getText().toString());
                         params.put("dtfim", dateEnd + hourEnd);
                         params.put("latitude", bundle.getString("latitude"));
                         params.put("longitude", bundle.getString("longitude"));
+
+
+                        if(check) {
+                            params.put("tolerancia", "0");
+                            Log.i("LOG!", "aqui");
+                        }else {
+                            params.put("tolerancia", editTextDelay.getText().toString());
+                        }
 
                         headers.put("x-access-token", preferences.getString("token", ""));
 
