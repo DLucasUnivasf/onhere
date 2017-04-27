@@ -112,17 +112,17 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editTextEmail.getText().toString().equals("")) {
-                    editTextEmail.requestFocus();
-                    editTextEmail.setError(getResources().getString(R.string.required_field));
-                }
-                else if (editTextPass.getText().toString().equals("")) {
-                    editTextPass.requestFocus();
-                    editTextPass.setError(getResources().getString(R.string.required_field));
-                }
-                else
+                    @Override
+                    public void onClick(View view) {
+                        if (editTextEmail.getText().toString().equals("")) {
+                            editTextEmail.requestFocus();
+                            editTextEmail.setError(getResources().getString(R.string.required_field));
+                        }
+                        else if (editTextPass.getText().toString().equals("")) {
+                            editTextPass.requestFocus();
+                            editTextPass.setError(getResources().getString(R.string.required_field));
+                        }
+                        else
                     if (ValidateField.isEmailValid(editTextEmail.getText().toString())) {
                         Log.i("LoginButton", "Email validado");
                         if(NetworkConnection.getInstance().isOnline()) {
@@ -147,7 +147,9 @@ public class LoginActivity extends AppCompatActivity {
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                                 try {
-                                                    preferences.edit().putString("token", response.getString("token")).apply();
+                                                    preferences.edit().putString("token", response.getString("token"))
+                                                                      .putString("fullname", response.getJSONObject("user").getString("fullname")).apply();
+
                                                     Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
                                                     startActivity(goToMain);
                                                     finish();

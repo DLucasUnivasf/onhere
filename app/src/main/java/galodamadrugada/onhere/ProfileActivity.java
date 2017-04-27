@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,12 +44,14 @@ import galodamadrugada.onhere.util.Consts;
  */
 
 public class ProfileActivity  extends AppCompatActivity implements EventAdapter.EventAdapterListener {
-    TextView        textViewInformation;
-    TextView        textViewName;
-    ImageButton     imageButtonEditProfile;
-    RecyclerView    recyclerView;
-    EventAdapter    eventAdapter;
-    List<Event>     events = new ArrayList<>();
+    TextView            textViewInformation;
+    TextView            textViewName;
+    ImageButton         imageButtonEditProfile;
+    RecyclerView        recyclerView;
+    EventAdapter        eventAdapter;
+    List<Event>         events = new ArrayList<>();
+    ImageView           imageButtonLogout;
+    SharedPreferences   preferences;
 
 
     @Override
@@ -59,10 +62,12 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
 
 
 
-        textViewInformation     = (TextView)     findViewById(R.id.textViewInformation);
-        textViewName            = (TextView)     findViewById(R.id.textViewName);
-        imageButtonEditProfile  = (ImageButton)  findViewById(R.id.imageButtonEditProfile);
-        recyclerView            = (RecyclerView) findViewById(R.id.recyclerView);
+        textViewInformation     = (TextView)        findViewById(R.id.textViewInformation);
+        textViewName            = (TextView)        findViewById(R.id.textViewName);
+
+        recyclerView            = (RecyclerView)    findViewById(R.id.recyclerView);
+        imageButtonLogout       = (ImageView)       findViewById(R.id.imageButtonLogout);
+        preferences             = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
         eventAdapter            = new EventAdapter(this, events, this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -70,6 +75,39 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
+
+
+        textViewName.setText(preferences.getString("fullname", ""));
+
+        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view){
+                AlertDialog.Builder builder =   new AlertDialog.Builder(ProfileActivity.this);
+
+                builder.setMessage(R.string.confirmation_exit_auccont)
+                        .setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent logoutIntent = new Intent(ProfileActivity.this, LoginActivity.class);
+
+                                preferences.edit().putString("token", "").apply();
+
+                                startActivity(logoutIntent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
         prepareEventData();
     }
@@ -232,4 +270,6 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
         dialog.show();
 
     }
+
+
 }

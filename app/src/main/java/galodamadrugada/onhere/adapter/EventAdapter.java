@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,14 +27,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, id;
-        public ImageButton butonDelete;
+        public ImageView butonDelete;
         public RelativeLayout eventContainer;
 
         public MyViewHolder(View view) {
             super(view);
             name        = (TextView) view.findViewById(R.id.name);
             id          = (TextView) view.findViewById(R.id.id);
-            butonDelete = (ImageButton) view.findViewById(R.id.button_delete_event);
+            butonDelete = (ImageView) view.findViewById(R.id.button_delete_event);
             eventContainer  = (RelativeLayout) view.findViewById(R.id.event_list_row);
         }
     }
