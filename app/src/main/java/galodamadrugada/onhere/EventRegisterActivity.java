@@ -102,14 +102,16 @@ public class EventRegisterActivity extends AppCompatActivity implements Button.O
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked) {
-                    editTextDelay.setEnabled(false);
-                    editTextDelay.setClickable(false);
-                    editTextDelay.setHint("");
+                    editTextDelay.setVisibility(View.INVISIBLE);
+//                    editTextDelay.setEnabled(false);
+//                    editTextDelay.setClickable(false);
+//                    editTextDelay.setHint("");
                     check = true;
                 } else {
-                    editTextDelay.setEnabled(true);
-                    editTextDelay.setClickable(true);
-                    editTextDelay.setHint(getResources().getString(R.string.delay_tolerance));
+                    editTextDelay.setVisibility(View.VISIBLE);
+//                    editTextDelay.setEnabled(true);
+//                    editTextDelay.setClickable(true);
+//                    editTextDelay.setHint(getResources().getString(R.string.delay_tolerance));
                     check = false;
                 }
 
