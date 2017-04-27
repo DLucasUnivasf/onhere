@@ -11,6 +11,7 @@
     <string name="cancel">Cancelar</string>
     <string name="send_reset_password_email">Insira e-mail para redefinir sua senha.</string>
     <string name="send_reset_password_email_title">Redefina sua senha.</string>
+    <string name="check_in">Check In</string>
     <string name="register">Cadastrar</string>
     <string name="name">Nome</string>
     <string name="form_register">Formulário de Cadastro:</string>

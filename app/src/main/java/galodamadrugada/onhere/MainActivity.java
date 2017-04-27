@@ -112,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 title.setTextColor(Color.WHITE);
                 title.setTextSize(20);*/
 
-                        builder.setView(view).setTitle("CHECKIN")
-                                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
+                builder.setView(view).setTitle(getResources().getString(R.string.check_in))
+                            .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
 
                                     }
                                 })
@@ -143,18 +143,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                                             if (mLastLocation != null) {
                                                 HashMap<String, String> header = new HashMap<>();
                                                 header.put("x-access-token", preferences.getString("token", ""));
-                                                HashMap<String,String> params = new HashMap<>();
-                                                params.put("latitude", String.valueOf(mLastLocation.getLatitude()));
-                                                params.put("longitude", String.valueOf(mLastLocation.getLongitude()));
 
-                                                Log.i("Latitude --> :", String.valueOf(mLastLocation.getLongitude()));
+                                                Log.i("Token --> :", preferences.getString("token", ""));
                                                 Log.i("Latitude --> :", String.valueOf(mLastLocation.getLatitude()));
+                                                Log.i("Longitude --> :", String.valueOf(mLastLocation.getLongitude()));
+                                                Log.i("EvenCode --> :", eventCode);
 
 
                                                 progressDialog.setMessage("Fazendo Checkin...");
                                                 progressDialog.show();
 
-                                                CustomRequest customRequest = new CustomRequest(Request.Method.GET, Consts.SERVER + Consts.CHECK_IN + "?chave=" + eventCode, params, header,
+                                                String urlRequest = Consts.SERVER + Consts.CHECK_IN + "?chave=" + eventCode + "&latitude=" + String.valueOf(mLastLocation.getLatitude()) + "&longitude=" + String.valueOf(mLastLocation.getLongitude());
+
+                                                CustomRequest customRequest = new CustomRequest(Request.Method.GET, urlRequest , null, header,
                                                         new Response.Listener<JSONObject>() {
                                                             @Override
                                                             public void onResponse(JSONObject response) {
