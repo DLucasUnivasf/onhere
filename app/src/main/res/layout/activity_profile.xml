@@ -25,10 +25,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1"
-        app:layout_constraintRight_toLeftOf="@+id/imageButtonLogout"
-        android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.047" />
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textViewName"
@@ -68,16 +65,6 @@
         android:text="@string/events"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewName" />
-
-    <ImageView
-        android:id="@+id/imageButtonLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_logout_black_24px"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

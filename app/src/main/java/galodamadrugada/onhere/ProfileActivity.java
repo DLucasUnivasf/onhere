@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,11 +48,9 @@ import galodamadrugada.onhere.util.Consts;
 public class ProfileActivity  extends AppCompatActivity implements EventAdapter.EventAdapterListener {
     TextView            textViewInformation;
     TextView            textViewName;
-    ImageButton         imageButtonEditProfile;
     RecyclerView        recyclerView;
     EventAdapter        eventAdapter;
     List<Event>         events = new ArrayList<>();
-    ImageView           imageButtonLogout;
     SharedPreferences   preferences;
 
 
@@ -64,9 +64,7 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
 
         textViewInformation     = (TextView)        findViewById(R.id.textViewInformation);
         textViewName            = (TextView)        findViewById(R.id.textViewName);
-
         recyclerView            = (RecyclerView)    findViewById(R.id.recyclerView);
-        imageButtonLogout       = (ImageView)       findViewById(R.id.imageButtonLogout);
         preferences             = getSharedPreferences(Consts.PREFS_FILE_NAME, MODE_PRIVATE);
         eventAdapter            = new EventAdapter(this, events, this);
 
@@ -76,13 +74,20 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
 
-
         textViewName.setText(preferences.getString("fullname", ""));
 
-        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
+        prepareEventData();
+    }
 
-            @Override
-            public void onClick(View view){
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_profile_logout:
                 AlertDialog.Builder builder =   new AlertDialog.Builder(ProfileActivity.this);
 
                 builder.setMessage(R.string.confirmation_exit_auccont)
@@ -106,10 +111,10 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
 
                 final AlertDialog dialog = builder.create();
                 dialog.show();
-            }
-        });
+                break;
 
-        prepareEventData();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void prepareEventData() {

@@ -74,4 +74,5 @@
     <string name="delay_limit_over">A quantidade de minutos do atraso permitido é superior à duração do evento.</string>
     <string name="confirmation_exit_auccont">Você realmente quer sair?</string>
     <string name="exit">Sair</string>
+    <string name="profile">Perfil</string>
 </resources>
