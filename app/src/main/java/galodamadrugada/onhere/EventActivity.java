@@ -55,7 +55,7 @@ public class EventActivity extends AppCompatActivity {
 
         for(int i = 0; i < jsonArray.length(); i++){
             try {
-                participants.add(jsonArray.getJSONObject(i).toString());
+                participants.add(jsonArray.getString(i));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
