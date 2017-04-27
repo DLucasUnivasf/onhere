@@ -76,4 +76,7 @@
     <string name="confirmation_exit_auccont">Você realmente quer sair?</string>
     <string name="exit">Sair</string>
     <string name="profile">Perfil</string>
+    <string name="ends">Termina</string>
+    <string name="starts">Começa em:</string>
+    <string name="participants">Participantes</string>
 </resources>

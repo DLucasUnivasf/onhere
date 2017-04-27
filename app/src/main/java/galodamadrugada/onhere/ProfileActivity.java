@@ -143,8 +143,16 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
                             try {
                                 if(jsonArray.getJSONObject(i) != null) {
                                     event.setName(jsonArray.getJSONObject(i).getString("nome"));
+                                    event.setDescription(jsonArray.getJSONObject(i).getString("descricao"));
+                                    event.setInitDate(jsonArray.getJSONObject(i).getString("dtin"));
+                                    event.setEndDate(jsonArray.getJSONObject(i).getString("dtfim"));
+                                    event.setTolerance(jsonArray.getJSONObject(i).getString("tolerancia"));
+                                    event.setLatitude(jsonArray.getJSONObject(i).getString("latitude"));
+                                    event.setLongitude(jsonArray.getJSONObject(i).getString("longitude"));
                                     event.setId(jsonArray.getJSONObject(i).getString("chave"));
+                                    event.setOwner(jsonArray.getJSONObject(i).getString("criador"));
                                     event.setParticipants((jsonArray.getJSONObject(i).getJSONArray("participantes") == null) ? new JSONArray() : jsonArray.getJSONObject(i).getJSONArray("participantes"));
+
                                     events.add(event);
 
                                     eventAdapter.notifyDataSetChanged();
@@ -182,8 +190,15 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
                             try {
                                 if(jsonArray.getJSONObject(i) != null) {
                                     event.setName(jsonArray.getJSONObject(i).getString("nome"));
+                                    event.setDescription(jsonArray.getJSONObject(i).getString("descricao"));
+                                    event.setInitDate(jsonArray.getJSONObject(i).getString("dtin"));
+                                    event.setEndDate(jsonArray.getJSONObject(i).getString("dtfim"));
+                                    event.setTolerance(jsonArray.getJSONObject(i).getString("tolerancia"));
+                                    event.setLatitude(jsonArray.getJSONObject(i).getString("latitude"));
+                                    event.setLongitude(jsonArray.getJSONObject(i).getString("longitude"));
                                     event.setId(jsonArray.getJSONObject(i).getString("chave"));
                                     event.setParticipants((jsonArray.getJSONObject(i).getJSONArray("participantes") == null) ? new JSONArray() : jsonArray.getJSONObject(i).getJSONArray("participantes"));
+
                                     events.add(event);
 
                                     eventAdapter.notifyDataSetChanged();
@@ -209,6 +224,12 @@ public class ProfileActivity  extends AppCompatActivity implements EventAdapter.
         Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
 
         intent.putExtra("name", event.getName());
+        intent.putExtra("description", event.getDescription());
+        intent.putExtra("initDate", event.getInitDate());
+        intent.putExtra("endDate", event.getEndDate());
+        intent.putExtra("tolerance", event.getTolerance());
+        intent.putExtra("latitude", event.getLatitude());
+        intent.putExtra("longitude", event.getLongitude());
         intent.putExtra("id",   event.getId());
         intent.putExtra("participants", event.getParticipants().toString());
 

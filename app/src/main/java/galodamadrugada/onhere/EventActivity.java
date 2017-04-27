@@ -4,27 +4,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by UNIVASF on 14/03/2017.
  */
 
 public class EventActivity extends AppCompatActivity {
-    private TextView nameTextView;
-    private TextView idTextView;
-    private ListView listPresence;
-    private JSONArray jsonArray;
+    private TextView            eventTextView;
+    private TextView            descriptionTextView;
+    private TextView            idTextView;
+    private TextView            dateBeginTextView;
+    private TextView            dateEndTextView;
+    private TextView            hourBeginTextView;
+    private TextView            hourEndTextView;
+    private ListView            listPresence;
+    private JSONArray           jsonArray;
+
 
     private ArrayList<String>   participants = new ArrayList<>();
     private ArrayAdapter<String>    adapter;
@@ -34,15 +42,41 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-        nameTextView    = (TextView) findViewById(R.id.nameTextView);
-        idTextView      = (TextView) findViewById(R.id.idTextView);
-        listPresence    = (ListView) findViewById(R.id.list_presence);
-
+        eventTextView       = (TextView) findViewById(R.id.eventTextView);
+        descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
+        idTextView          = (TextView) findViewById(R.id.idTextView);
+        dateBeginTextView   = (TextView) findViewById(R.id.dateBeginTextView);
+        dateEndTextView     = (TextView) findViewById(R.id.dateEndTextView);
+        hourBeginTextView   = (TextView) findViewById(R.id.hourBeginTextView);
+        hourEndTextView     = (TextView) findViewById(R.id.hourEndTextView);
+        listPresence        = (ListView) findViewById(R.id.list_presence);
 
         Intent intent = getIntent();
         String jsonString = intent.getStringExtra("participants");
-        nameTextView.setText(getIntent().getExtras().getString("name"));
+        eventTextView.setText(getIntent().getExtras().getString("name"));
         idTextView.setText(getIntent().getExtras().getString("id"));
+        descriptionTextView.setText(getIntent().getExtras().getString("description"));
+
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.US);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        SimpleDateFormat hourFormatter = new SimpleDateFormat("hh:mm", Locale.US);
+
+        try {
+            Date initDate = parser.parse(getIntent().getExtras().getString("initDate"));
+            dateBeginTextView.setText(dateFormatter.format(initDate));
+            hourBeginTextView.setText(hourFormatter.format(initDate));
+        }catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Date endDate = parser.parse(getIntent().getExtras().getString("endDate"));
+            dateEndTextView.setText(dateFormatter.format(endDate));
+            hourEndTextView.setText(hourFormatter.format(endDate));
+        }catch(ParseException e) {
+            e.printStackTrace();
+        }
+
 
         Log.i("EventActivity", jsonString);
 

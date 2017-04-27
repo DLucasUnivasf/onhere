@@ -8,7 +8,7 @@ import org.json.JSONArray;
 
 public class Event {
 
-    private String name, id, description, initDate, endDate, tolerance, owner;
+    private String name, id, description, initDate, endDate, tolerance, owner, latitude, longitude;
     private JSONArray participants;
 
     public Event(){}
@@ -73,5 +73,21 @@ public class Event {
 
     public void setParticipants(JSONArray participants) {
         this.participants = participants;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }
